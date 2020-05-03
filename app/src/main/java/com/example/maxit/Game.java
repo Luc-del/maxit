@@ -28,7 +28,7 @@ public class Game extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.game);
-        Grid.setSize(4,4);
+//        Grid.setSize(3,4);
 
 
     }
