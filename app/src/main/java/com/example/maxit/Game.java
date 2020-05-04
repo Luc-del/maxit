@@ -9,10 +9,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Game extends AppCompatActivity {
+
+    boolean playerTurn = true;
+
+    int Nx = 3;
+    int Ny = 4;
 
     private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
         @Override
@@ -28,9 +34,28 @@ public class Game extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.game);
-//        Grid.setSize(3,4);
+
+        instanciateGrid();
+
+        Play();
 
 
+    }
+
+    public void instanciateGrid() {
+        Grid.setSize(Nx,Ny);
+    }
+
+    public void Play() {
+
+    }
+
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+
+        
+        return true;
     }
 
 }

@@ -21,6 +21,8 @@ public class Grid extends View {
     int Dx;
     int Dy;
 
+    int [][] values;
+
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public Grid(Context context, AttributeSet attrs){
@@ -48,7 +50,6 @@ public class Grid extends View {
         width = getWidth();
         Dx = height/Nx;
         Dy = width/Ny;
-        invalidate();
     }
 
     static void setSize(int nx, int ny) {
@@ -81,7 +82,10 @@ public class Grid extends View {
         canvas.drawText(str, getY(j)-centerY(str), getX(i)-centerX(), paint);
     }
 
-    private void fill() {
+    public void fill() {
+
+        values = new int[Ny][Nx];
+
         double relation = Math.sqrt(canvas.getWidth() * canvas.getHeight());
         relation = relation / 250;
         paint.setTextSize((float) (10 * relation));
@@ -89,7 +93,9 @@ public class Grid extends View {
         for(int i = 0; i < Ny; i++)
         {
             for(int j = 0; j < Nx; j++) {
-                fill(Integer.toString(i+Ny*j),j,i);
+                int k = i+Ny*j;
+                fill(Integer.toString(k),j,i);
+                values[j][i] = k;
             }
         }
 
