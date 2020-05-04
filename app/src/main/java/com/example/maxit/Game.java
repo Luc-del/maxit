@@ -76,13 +76,11 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
         setDataAdapter();
 
         // Set all cells as available
-        for(int i = 0; i < Ny; i++)
+        for(int i = 0; i < Nx*Ny; i++)
         {
-            for(int j = 0; j < Nx; j++) {
-                int k = i*Nx+j;
-                available_positions.add(k);
-            }
+            available_positions.add(i);
         }
+        log("fill0",Arrays.toString(available_positions.toArray()));
     }
 
     // Initialize the GUI Components
@@ -96,11 +94,15 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
     // Insert data
     private void fillData()
     {
+        List<Integer> given = new ArrayList<>();
         for(int i = 0; i < Ny; i++)
         {
             for(int j = 0; j < Nx; j++) {
-                int k = i*Nx+j;
+//                int k = i*Nx+j;
+                int k =(int)(Nx*Ny*Math.random())+1;
+                while(given.contains(k)) k =(int)(Nx*Ny*Math.random())+1;
                 data.add(new Cell(k));
+                given.add(k);
             }
         }
     }
@@ -139,12 +141,11 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
         while (position<boundary) {
             if (!data.get(position).isPlayed()) {
                 available_positions.add(position);
-                Log.d("avail", Integer.toString(position));
                 data.get(position).setBackgroundColor(color_avail);
             }
             position+=step;
         }
-        Log.d("avail", Arrays.toString(available_positions.toArray()));
+        log("avail",Arrays.toString(available_positions.toArray()));
     }
 
 
@@ -154,7 +155,7 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
     {
         int v = data.get(position).getValue();
 
-        if (available_positions.contains(v)) {
+        if (available_positions.contains(position)) {
 
             if (playerTurn) {
                 score1 += v;
@@ -199,7 +200,9 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
-
+    public void log(String tag, String msg) {
+        Log.d(tag, msg);
+    }
 
 
 }
