@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -13,15 +14,21 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.arch.core.util.Function;
 
 import java.util.ArrayList;
 
 public class Game extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     boolean playerTurn = true;
+    List<Integer> available_positions  = new ArrayList<>();
 
     int score1 = 0;
     int score2 = 0;
@@ -29,8 +36,13 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
     TextView view_score1;
     TextView view_score2;
 
-    int Nx = 8;
-    int Ny = 8;
+    int Nx = 3;
+    int Ny = 4;
+
+    int color_avail;
+    int color_played;
+    int color_player1;
+    int color_player2;
 
     GridView gridview;
     GridViewAdapter gridviewAdapter;
@@ -46,20 +58,32 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.game);
 
         view_score1 = findViewById(R.id.player1_score);
         view_score2 = findViewById(R.id.player2_score);
+        color_avail = getResources().getColor(R.color.available_cell);
+        color_played = getResources().getColor(R.color.played_cell);
+        color_player1 = getResources().getColor(R.color.player1);
+        color_player2 = getResources().getColor(R.color.player2);
+
 
         initView();
         fillData();
         setDataAdapter();
 
+        // Set all cells as available
+        for(int i = 0; i < Ny; i++)
+        {
+            for(int j = 0; j < Nx; j++) {
+                int k = i*Nx+j;
+                available_positions.add(k);
+            }
+        }
     }
-
 
     // Initialize the GUI Components
     private void initView()
@@ -69,7 +93,7 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
         gridview.setOnItemClickListener(this);
     }
 
-    // Insert The Data
+    // Insert data
     private void fillData()
     {
         for(int i = 0; i < Ny; i++)
@@ -90,27 +114,92 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
 //        gridview.setStretchMode(GridView.NO_STRETCH);
     }
 
+
+    private void resetCellsColor() {
+        for(int i = 0; i < available_positions.size(); i++) {
+            data.get(available_positions.get(i)).getView().setBackgroundColor(0);
+        }
+    }
+
+    //After each play, update list of avaible cells (highlight)
+    private void setAvailableCells (int position) {
+
+        available_positions.clear();
+
+        int boundary = Nx*Ny;
+        int step  = Nx;
+        //Ligne
+        if (playerTurn) {
+            step = 1;
+            boundary = Nx*(position/Nx+1);
+            position = Nx*(position/Nx);
+        }
+        else position%=Nx;
+
+        while (position<boundary) {
+            if (!data.get(position).isPlayed()) {
+                available_positions.add(position);
+                Log.d("avail", Integer.toString(position));
+                data.get(position).setBackgroundColor(color_avail);
+            }
+            position+=step;
+        }
+        Log.d("avail", Arrays.toString(available_positions.toArray()));
+    }
+
+
+
     @Override
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
     {
         int v = data.get(position).getValue();
-        String message = "Clicked : " + v;
-        Toast.makeText(getApplicationContext(), message , Toast.LENGTH_SHORT).show();
 
-        if (playerTurn) {
-            score1 += v;
-            view_score1.setText(Integer.toString(score1));
-            ((TextView)findViewById(R.id.turn)).setText(R.string.turn_player2);
+        if (available_positions.contains(v)) {
+
+            if (playerTurn) {
+                score1 += v;
+                view_score1.setText(Integer.toString(score1));
+                ((TextView) findViewById(R.id.turn)).setText(R.string.turn_player2);
+                data.get(position).setTextColor(color_player1);
+            } else {
+                score2 += v;
+                view_score2.setText(Integer.toString(score2));
+                ((TextView) findViewById(R.id.turn)).setText(R.string.turn_player1);
+                data.get(position).setTextColor(color_player2);
+            }
+
+            playerTurn = !playerTurn;
+            data.get(position).setPlayed();
+
+            resetCellsColor();
+            setAvailableCells(position);
+            data.get(position).setBackgroundColor(color_played);
         }
-        else {
-            score2 += v;
-            view_score2.setText(Integer.toString(score2));
-            ((TextView)findViewById(R.id.turn)).setText(R.string.turn_player1);
+        else toast("Unavailable value : "+v);
+
+        // end game
+        if(available_positions.isEmpty()) {
+            toast("end");
+            TextView end = ((TextView) findViewById(R.id.turn));
+            if(score1>score2) {
+                end.setText(R.string.player1_wins);
+                end.setTextColor(color_player1);
+            }
+            else if(score1<score2) {
+                end.setText(R.string.player2_wins);
+                end.setTextColor(color_player2);
+            }
+            else end.setText(R.string.draw);
+
         }
-
-        playerTurn = !playerTurn;
-
 
     }
+
+    public void toast(String msg) {
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+
+
 
 }
