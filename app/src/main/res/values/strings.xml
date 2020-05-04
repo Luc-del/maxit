@@ -2,4 +2,7 @@
     <string name="app_name">Max it !</string>
     <string name="play_button">Jouer</string>
 
+    <string name="turn_player1">Au tour du joueur 1</string>
+    <string name="turn_player2">Au tour du joueur 2</string>
+
 </resources>

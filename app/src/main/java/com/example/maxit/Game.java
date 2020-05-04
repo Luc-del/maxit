@@ -8,7 +8,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -16,12 +19,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-public class Game extends AppCompatActivity {
+public class Game extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     boolean playerTurn = true;
 
-    int Nx = 3;
-    int Ny = 4;
+    int score1 = 0;
+    int score2 = 0;
+
+    TextView view_score1;
+    TextView view_score2;
+
+    int Nx = 8;
+    int Ny = 8;
 
     GridView gridview;
     GridViewAdapter gridviewAdapter;
@@ -42,9 +51,12 @@ public class Game extends AppCompatActivity {
 
         setContentView(R.layout.game);
 
-        initView(); // Initialize the GUI Components
-        fillData(); // Insert The Data
-        setDataAdapter(); // Set the Data Adapter
+        view_score1 = findViewById(R.id.player1_score);
+        view_score2 = findViewById(R.id.player2_score);
+
+        initView();
+        fillData();
+        setDataAdapter();
 
     }
 
@@ -54,7 +66,7 @@ public class Game extends AppCompatActivity {
     {
         gridview = (GridView) findViewById(R.id.gridView);
         gridview.setNumColumns(Nx);
-//        gridview.setOnItemClickListener(this);
+        gridview.setOnItemClickListener(this);
     }
 
     // Insert The Data
@@ -74,13 +86,31 @@ public class Game extends AppCompatActivity {
     {
         gridviewAdapter = new GridViewAdapter(getApplicationContext(), R.layout.game, data);
         gridview.setAdapter(gridviewAdapter);
+        gridview.setVerticalSpacing(100);
+//        gridview.setStretchMode(GridView.NO_STRETCH);
     }
 
-//    @Override
-//    public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
-//    {
-//        String message = "Clicked : " + data.get(position).getTitle();
-//        Toast.makeText(getApplicationContext(), message , Toast.LENGTH_SHORT).show();
-//    }
+    @Override
+    public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
+    {
+        int v = data.get(position).getValue();
+        String message = "Clicked : " + v;
+        Toast.makeText(getApplicationContext(), message , Toast.LENGTH_SHORT).show();
+
+        if (playerTurn) {
+            score1 += v;
+            view_score1.setText(Integer.toString(score1));
+            ((TextView)findViewById(R.id.turn)).setText(R.string.turn_player2);
+        }
+        else {
+            score2 += v;
+            view_score2.setText(Integer.toString(score2));
+            ((TextView)findViewById(R.id.turn)).setText(R.string.turn_player1);
+        }
+
+        playerTurn = !playerTurn;
+
+
+    }
 
 }
