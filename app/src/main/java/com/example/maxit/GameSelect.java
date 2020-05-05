@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +22,14 @@ public class GameSelect extends AppCompatActivity {
     Button bot;
     Button local;
     Button online;
-    Button play;
+    Button size;
+
+    private View.OnClickListener UNAVAILABLE = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getApplicationContext(), "Mode de jeu non disponible", Toast.LENGTH_SHORT).show();
+        }
+    };
 
 
 
@@ -36,9 +44,9 @@ public class GameSelect extends AppCompatActivity {
         bot = findViewById(R.id.brainvsbot);
         local = findViewById(R.id.local);
         online = findViewById(R.id.online);
-        play = findViewById(R.id.play_button);
+        size = findViewById(R.id.size);
 
-        play.setOnClickListener(new View.OnClickListener() {
+        local.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -51,5 +59,10 @@ public class GameSelect extends AppCompatActivity {
                 finish();
             }
         });
+
+        bot.setOnClickListener(UNAVAILABLE);
+        online.setOnClickListener(UNAVAILABLE);
     }
+
+
 }

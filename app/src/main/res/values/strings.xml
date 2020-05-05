@@ -11,8 +11,12 @@
 
     <string name="play_again">Rejouer</string>
 
+    <string name="game_mode">Modes de jeu</string>
     <string name="brainvsbot">Brain vs IA</string>
     <string name="local">Local</string>
     <string name="online">Online</string>
+    <string name="custom_size">Taille personnalisée</string>
+    <string name="lines">Lignes</string>
+    <string name="columns">Colonnes</string>
 
 </resources>

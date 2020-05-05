@@ -2,55 +2,90 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RadioGroup
-        android:id="@+id/gameselect"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/game_mode"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" >
+        android:layout_marginTop="50sp"
+        android:layout_marginBottom="20sp"
+        android:textSize="30sp"
+        android:textColor="@color/black_overlay"
+        android:text="@string/game_mode"/>
 
-        <RadioButton
-            android:id="@+id/brainvsbot"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:checked="true"
-            android:background="@drawable/button"
-            android:button="@null"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/brainvsbot" />
-
-        <RadioButton
-            android:id="@+id/local"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/button"
-            android:button="@null"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/local" />
-
-        <RadioButton
-            android:id="@+id/online"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/button"
-            android:button="@null"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/online" />
-    </RadioGroup>
 
     <Button
-        android:id="@+id/play_button"
+        android:id="@+id/brainvsbot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/game_mode"
+        android:layout_margin="20sp"
+        android:padding="10sp"
+        android:checked="true"
+        android:background="@drawable/button"
+        android:button="@null"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text="@string/brainvsbot" />
+
+    <Button
+        android:id="@+id/local"
+        android:padding="10sp"
+        android:layout_margin="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/brainvsbot"
+        android:background="@drawable/button"
+        android:button="@null"
         android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="60dp"
-        android:text="@string/play_button"/>
+        android:text="@string/local" />
+
+    <Button
+        android:id="@+id/online"
+        android:padding="10sp"
+        android:layout_margin="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/local"
+        android:background="@drawable/button"
+        android:button="@null"
+        android:gravity="center"
+        android:text="@string/online" />
+
+    <Button
+        android:id="@+id/size"
+        android:padding="10sp"
+        android:layout_marginTop="50sp"
+        android:layout_marginBottom="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/online"
+        android:background="@drawable/button"
+        android:button="@null"
+        android:gravity="center"
+        android:text="@string/custom_size" />
+
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:rowCount="1"
+        android:columnCount="2"
+        android:layout_below="@id/size">
+            <NumberPicker
+                android:id="@+id/columnsPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <NumberPicker
+            android:id="@+id/columnsPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+     </GridLayout>
+
 
 </RelativeLayout>
