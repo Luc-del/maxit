@@ -9,4 +9,6 @@
     <string name="player2_wins">Victoire du joueur 2</string>
     <string name="draw">Égalité</string>
 
+    <string name="play_again">Rejouer</string>
+
 </resources>

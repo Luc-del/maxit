@@ -9,5 +9,5 @@
     <color name="player2">#032AC5</color>
 
     <color name="available_cell">#A1CF97</color>
-    <color name="played_cell">#504F4F</color>
+    <color name="played_cell">#727171</color>
 </resources>

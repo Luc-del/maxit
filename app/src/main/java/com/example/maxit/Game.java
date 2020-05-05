@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -148,7 +149,36 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
         log("avail",Arrays.toString(available_positions.toArray()));
     }
 
+    private void End() {
 
+        TextView end = ((TextView) findViewById(R.id.turn));
+        if(score1>score2) {
+            end.setText(R.string.player1_wins);
+            end.setTextColor(color_player1);
+        }
+        else if(score1<score2) {
+            end.setText(R.string.player2_wins);
+            end.setTextColor(color_player2);
+        }
+        else end.setText(R.string.draw);
+
+        //Make grid disappear
+        gridview.setVisibility(View.INVISIBLE);
+
+        // Make button appear
+        Button play_again = findViewById(R.id.play_again);
+        play_again.setVisibility(View.VISIBLE);
+        play_again.setClickable(true);
+
+        play_again.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(getIntent());
+            }
+        });
+
+    }
 
     @Override
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
@@ -179,20 +209,7 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
         else toast("Unavailable value : "+v);
 
         // end game
-        if(available_positions.isEmpty()) {
-            toast("end");
-            TextView end = ((TextView) findViewById(R.id.turn));
-            if(score1>score2) {
-                end.setText(R.string.player1_wins);
-                end.setTextColor(color_player1);
-            }
-            else if(score1<score2) {
-                end.setText(R.string.player2_wins);
-                end.setTextColor(color_player2);
-            }
-            else end.setText(R.string.draw);
-
-        }
+        if(available_positions.isEmpty()) End();;
 
     }
 
