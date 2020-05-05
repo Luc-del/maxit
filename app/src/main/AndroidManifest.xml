@@ -21,6 +21,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".GameSelect"
+            android:label="gameselect" >
+        </activity>
+        <activity
             android:name=".Game"
             android:label="game" >
         </activity>

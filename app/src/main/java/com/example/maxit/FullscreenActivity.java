@@ -84,7 +84,7 @@ public class FullscreenActivity extends AppCompatActivity {
             if (AUTO_HIDE) {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS);
             }
-            startActivity(new Intent(view.getContext(), Game.class));
+            startActivity(new Intent(view.getContext(), GameSelect.class));
             return true;
         }
     };

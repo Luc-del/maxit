@@ -11,4 +11,8 @@
 
     <string name="play_again">Rejouer</string>
 
+    <string name="brainvsbot">Brain vs IA</string>
+    <string name="local">Local</string>
+    <string name="online">Online</string>
+
 </resources>

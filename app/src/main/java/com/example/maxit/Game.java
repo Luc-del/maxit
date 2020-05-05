@@ -37,8 +37,8 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
     TextView view_score1;
     TextView view_score2;
 
-    int Nx = 3;
-    int Ny = 4;
+    int Nx = 8;
+    int Ny = 8;
 
     int color_avail;
     int color_played;
@@ -63,6 +63,12 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
 //        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.game);
+
+        Bundle b = getIntent().getExtras();
+        if(b != null) {
+            Nx = b.getInt("Nx");
+            Ny = b.getInt("Ny");
+        }
 
         view_score1 = findViewById(R.id.player1_score);
         view_score2 = findViewById(R.id.player2_score);
