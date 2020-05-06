@@ -16,14 +16,9 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.arch.core.util.Function;
 
 import java.util.ArrayList;
 
@@ -88,7 +83,6 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         {
             available_positions.add(i);
         }
-        log("fill0",Arrays.toString(available_positions.toArray()));
     }
 
     // Initialize the GUI Components
@@ -121,14 +115,17 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         gridviewAdapter = new GridViewAdapter(getApplicationContext(), R.layout.game, data);
         gridview.setAdapter(gridviewAdapter);
         gridview.setVerticalSpacing(100);
-//        gridview.setStretchMode(GridView.NO_STRETCH);
     }
 
 
     private void resetCellsColor() {
         for(int i = 0; i < available_positions.size(); i++) {
-            data.get(available_positions.get(i)).getView().setBackgroundColor(0);
+            getCell(available_positions.get(i)).setBackgroundColor(0);
         }
+    }
+
+    private TextView getCell(int position) {
+        return (TextView) gridview.getChildAt(position);
     }
 
     //After each play, update list of avaible cells (highlight)
@@ -149,7 +146,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         while (position<boundary) {
             if (!data.get(position).isPlayed()) {
                 available_positions.add(position);
-                data.get(position).setBackgroundColor(color_avail);
+                getCell(position).setBackgroundColor(color_avail);
             }
             position+=step;
         }
@@ -191,6 +188,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
     {
         int v = data.get(position).getValue();
+        Log.d("Position clicked ", " "+position);
 
         if (available_positions.contains(position)) {
 
@@ -198,12 +196,12 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
                 score1 += v;
                 view_score1.setText(Integer.toString(score1));
                 ((TextView) findViewById(R.id.turn)).setText(R.string.turn_player2);
-                data.get(position).setTextColor(color_player1);
+                getCell(position).setTextColor(color_player1);
             } else {
                 score2 += v;
                 view_score2.setText(Integer.toString(score2));
                 ((TextView) findViewById(R.id.turn)).setText(R.string.turn_player1);
-                data.get(position).setTextColor(color_player2);
+                getCell(position).setTextColor(color_player2);
             }
 
             playerTurn = !playerTurn;
@@ -211,13 +209,12 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
             resetCellsColor();
             setAvailableCells(position);
-            data.get(position).setBackgroundColor(color_played);
+            getCell(position).setBackgroundColor(color_played);
         }
         else toast("Unavailable value : "+v);
 
         // end game
         if(available_positions.isEmpty()) End();;
-
     }
 
     public void toast(String msg) {

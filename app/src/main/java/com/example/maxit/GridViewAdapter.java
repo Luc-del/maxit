@@ -3,11 +3,13 @@ package com.example.maxit;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,11 +30,19 @@ public class GridViewAdapter extends ArrayAdapter<Cell>
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        TextView v = new TextView(mContext);
+        Log.d("GridViewAdapter", "Getting view "+position);
+        TextView v;
+        if(convertView==null) {
+            Log.d("GridViewAdapter", "null convertView");
+            v = new TextView(mContext);
+        }
+        else v = (TextView) convertView;
+
         Cell cell = getItem(position);
         v.setText(Integer.toString(cell.getValue()));
         v.setGravity(Gravity.CENTER);
         cell.setView(v);
+        Log.d("GridViewAdapter", "Id "+cell.id +" value "+cell.value);
 
         return v;
     }

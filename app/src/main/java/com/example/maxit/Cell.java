@@ -1,10 +1,11 @@
 package com.example.maxit;
 
+import android.util.Log;
 import android.widget.TextView;
 
 public class Cell {
 
-    static int counter;
+    static int counter = 0;
     public int value;
     public boolean played = false;
     public int id;
@@ -12,9 +13,9 @@ public class Cell {
     TextView view;
 
     public Cell(int x){
-        counter++;
         value = x;
         id = counter;
+        counter++;
     }
 
     public void setValue(int x) {
