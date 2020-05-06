@@ -1,6 +1,7 @@
 package com.example.maxit;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +27,7 @@ import androidx.arch.core.util.Function;
 
 import java.util.ArrayList;
 
-public class Game extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class Game extends Activity implements AdapterView.OnItemClickListener {
 
     boolean playerTurn = true;
     List<Integer> available_positions  = new ArrayList<>();
@@ -59,8 +60,8 @@ public class Game extends AppCompatActivity implements AdapterView.OnItemClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.game);
 
