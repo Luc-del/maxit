@@ -33,8 +33,8 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     TextView view_score1;
     TextView view_score2;
 
-    int Nx = 8;
-    int Ny = 8;
+    int Nx = 5;
+    int Ny = 5;
 
     int color_avail;
     int color_played;
