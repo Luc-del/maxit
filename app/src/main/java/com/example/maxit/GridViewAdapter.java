@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -42,6 +43,8 @@ public class GridViewAdapter extends ArrayAdapter<Cell>
         v.setText(Integer.toString(cell.getValue()));
         v.setGravity(Gravity.CENTER);
         cell.setView(v);
+        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(200,100);
+        v.setLayoutParams(lp);
         Log.d("GridViewAdapter", "Id "+cell.id +" value "+cell.value);
 
         return v;

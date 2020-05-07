@@ -33,8 +33,8 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     TextView view_score1;
     TextView view_score2;
 
-    int Nx = 5;
-    int Ny = 5;
+    int Nx;
+    int Ny;
 
     int color_avail;
     int color_played;
@@ -114,7 +114,6 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     {
         gridviewAdapter = new GridViewAdapter(getApplicationContext(), R.layout.game, data);
         gridview.setAdapter(gridviewAdapter);
-        gridview.setVerticalSpacing(100);
     }
 
 

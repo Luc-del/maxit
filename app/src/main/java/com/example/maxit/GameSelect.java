@@ -31,8 +31,8 @@ public class GameSelect extends Activity {
     NumberPicker linespicker;
     NumberPicker columnspicker;
 
-    int Nx = 8;
-    int Ny = 8;
+    int Nx = 5;
+    int Ny = 5;
 
     private View.OnClickListener UNAVAILABLE = new View.OnClickListener() {
         @Override
