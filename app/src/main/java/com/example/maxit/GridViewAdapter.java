@@ -35,7 +35,7 @@ public class GridViewAdapter extends ArrayAdapter<Cell>
         TextView v;
         if(convertView==null) {
             Log.d("GridViewAdapter", "null convertView");
-            v = new TextView(mContext);
+            v = new CellGrid(mContext);
         }
         else v = (TextView) convertView;
 
@@ -43,8 +43,8 @@ public class GridViewAdapter extends ArrayAdapter<Cell>
         v.setText(Integer.toString(cell.getValue()));
         v.setGravity(Gravity.CENTER);
         cell.setView(v);
-        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(200,100);
-        v.setLayoutParams(lp);
+//        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(200,100);
+//        v.setLayoutParams(lp);
         Log.d("GridViewAdapter", "Id "+cell.id +" value "+cell.value);
 
         return v;

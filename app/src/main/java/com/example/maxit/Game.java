@@ -1,10 +1,7 @@
 package com.example.maxit;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,8 +35,6 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     int Ny;
     boolean vsbot;
 
-    int color_avail;
-    int color_played;
     int color_player1;
     int color_player2;
 
@@ -71,8 +66,6 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
         view_score1 = findViewById(R.id.player1_score);
         view_score2 = findViewById(R.id.player2_score);
-        color_avail = getResources().getColor(R.color.available_cell);
-        color_played = getResources().getColor(R.color.played_cell);
         color_player1 = getResources().getColor(R.color.player1);
         color_player2 = getResources().getColor(R.color.player2);
 
@@ -119,7 +112,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
     private void resetCellsColor() {
         for(int i = 0; i < available_positions.size(); i++) {
-            getCell(available_positions.get(i)).setBackgroundColor(0);
+            getCell(available_positions.get(i)).setBackground(getResources().getDrawable(R.drawable.cellgrid));
         }
     }
 
@@ -129,7 +122,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
     private void setPlayed(int position) {
         data.get(position).setPlayed();
-        getCell(position).setBackgroundColor(color_played);
+        getCell(position).setBackground(getResources().getDrawable(R.drawable.cellgrid_played));
     }
 
     //After each play, update list of avaible cells (highlight)
@@ -137,7 +130,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
         available_positions.clear();
         available_positions = getPlayableCells(position,playerTurn);
-        for(int i = 0; i < available_positions.size(); i++) getCell(available_positions.get(i)).setBackgroundColor(color_avail);
+        for(int i = 0; i < available_positions.size(); i++) getCell(available_positions.get(i)).setBackground(getResources().getDrawable(R.drawable.cellgrid_avail));
         log("avail",Arrays.toString(available_positions.toArray()));
     }
 
@@ -228,13 +221,11 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
             getCell(position).setTextColor(color_player2);
         }
 
-        playerTurn = !playerTurn;
-//        setPlayed(position);
-        data.get(position).setPlayed();
-        getCell(position).setBackgroundColor(color_played);
-
         resetCellsColor();
         setAvailableCells(position);
+
+        playerTurn = !playerTurn;
+        setPlayed(position);
 
         if(available_positions.isEmpty()) End();
     }

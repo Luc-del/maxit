@@ -10,6 +10,7 @@
         android:layout_gravity="center"
         android:fontFamily="trebuchet"
         android:textColor="@android:color/black"
+        android:background="@drawable/cellgrid"
         android:textSize="15sp"
         android:textStyle="bold" />
 
