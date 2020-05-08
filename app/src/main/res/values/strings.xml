@@ -10,6 +10,7 @@
     <string name="draw">Égalité</string>
 
     <string name="play_again">Rejouer</string>
+    <string name="unavailable_value">Valeur indisponible</string>
 
     <string name="game_mode">Modes de jeu</string>
     <string name="brainvsbot">Brain vs IA</string>

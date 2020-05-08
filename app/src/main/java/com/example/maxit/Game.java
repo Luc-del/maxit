@@ -195,7 +195,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         if (available_positions.contains(position)) {
             if (Play(position) && vsbot) bot_play();
         }
-        else toast("Unavailable value : "+data.get(position).getValue());
+        else toast(getResources().getString(R.string.unavailable_value)+" : "+data.get(position).getValue());
     }
 
     public void toast(String msg) {
