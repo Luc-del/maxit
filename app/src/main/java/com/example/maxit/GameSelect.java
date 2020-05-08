@@ -41,6 +41,22 @@ public class GameSelect extends Activity {
         }
     };
 
+    private View.OnClickListener local_game = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(GameSelect.this, Game.class);
+            Bundle b = new Bundle();
+            b.putInt("Nx", Nx);
+            b.putInt("Ny", Ny);
+            boolean bot_selected = false;
+            if(v.getId()==bot.getId()) bot_selected = true;
+            b.putBoolean("bot",bot_selected);
+            intent.putExtras(b);
+            startActivity(intent);
+            finish();
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,22 +82,9 @@ public class GameSelect extends Activity {
         columnspicker.setMinValue(3);
         columnspicker.setValue(8);
 
-        bot.setOnClickListener(UNAVAILABLE);
+        bot.setOnClickListener(local_game);
         online.setOnClickListener(UNAVAILABLE);
-
-        local.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(GameSelect.this, Game.class);
-                Bundle b = new Bundle();
-                b.putInt("Nx", Nx);
-                b.putInt("Ny", Ny);
-                intent.putExtras(b);
-                startActivity(intent);
-                finish();
-            }
-        });
+        local.setOnClickListener(local_game);
 
         size.setOnClickListener(new View.OnClickListener() {
             @Override

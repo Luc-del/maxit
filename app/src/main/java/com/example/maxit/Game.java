@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -35,6 +36,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
     int Nx;
     int Ny;
+    boolean vsbot;
 
     int color_avail;
     int color_played;
@@ -64,6 +66,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         if(b != null) {
             Nx = b.getInt("Nx");
             Ny = b.getInt("Ny");
+            vsbot = b.getBoolean("bot");
         }
 
         view_score1 = findViewById(R.id.player1_score);
@@ -79,10 +82,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         setDataAdapter();
 
         // Set all cells as available
-        for(int i = 0; i < Nx*Ny; i++)
-        {
-            available_positions.add(i);
-        }
+        for(int i = 0; i < Nx*Ny; i++) available_positions.add(i);
     }
 
     // Initialize the GUI Components
@@ -127,15 +127,28 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         return (TextView) gridview.getChildAt(position);
     }
 
+    private void setPlayed(int position) {
+        data.get(position).setPlayed();
+        getCell(position).setBackgroundColor(color_played);
+    }
+
     //After each play, update list of avaible cells (highlight)
     private void setAvailableCells (int position) {
 
         available_positions.clear();
+        available_positions = getPlayableCells(position,playerTurn);
+        for(int i = 0; i < available_positions.size(); i++) getCell(available_positions.get(i)).setBackgroundColor(color_avail);
+        log("avail",Arrays.toString(available_positions.toArray()));
+    }
 
+    private ArrayList<Integer> getPlayableCells(int position, boolean turn) {
+
+        int ini_pos = position;
+        ArrayList<Integer> cells = new ArrayList<Integer>();
         int boundary = Nx*Ny;
         int step  = Nx;
         //Ligne
-        if (playerTurn) {
+        if (turn) {
             step = 1;
             boundary = Nx*(position/Nx+1);
             position = Nx*(position/Nx);
@@ -143,13 +156,12 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         else position%=Nx;
 
         while (position<boundary) {
-            if (!data.get(position).isPlayed()) {
-                available_positions.add(position);
-                getCell(position).setBackgroundColor(color_avail);
-            }
+            Cell cell = data.get(position);
+            if (!cell.isPlayed() && position!=ini_pos) cells.add(position);
             position+=step;
         }
-        log("avail",Arrays.toString(available_positions.toArray()));
+
+        return cells;
     }
 
     private void End() {
@@ -186,34 +198,11 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     @Override
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
     {
-        int v = data.get(position).getValue();
-        Log.d("Position clicked ", " "+position);
-
         if (available_positions.contains(position)) {
-
-            if (playerTurn) {
-                score1 += v;
-                view_score1.setText(Integer.toString(score1));
-                ((TextView) findViewById(R.id.turn)).setText(R.string.turn_player2);
-                getCell(position).setTextColor(color_player1);
-            } else {
-                score2 += v;
-                view_score2.setText(Integer.toString(score2));
-                ((TextView) findViewById(R.id.turn)).setText(R.string.turn_player1);
-                getCell(position).setTextColor(color_player2);
-            }
-
-            playerTurn = !playerTurn;
-            data.get(position).setPlayed();
-
-            resetCellsColor();
-            setAvailableCells(position);
-            getCell(position).setBackgroundColor(color_played);
+            Play(position);
+            if(vsbot) bot_play();
         }
-        else toast("Unavailable value : "+v);
-
-        // end game
-        if(available_positions.isEmpty()) End();;
+        else toast("Unavailable value : "+data.get(position).getValue());
     }
 
     public void toast(String msg) {
@@ -224,5 +213,55 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         Log.d(tag, msg);
     }
 
+    public void Play(int position) {
+
+        int value = data.get(position).getValue();
+        if (playerTurn) {
+            score1 += value;
+            view_score1.setText(Integer.toString(score1));
+            ((TextView) findViewById(R.id.turn)).setText(R.string.turn_player2);
+            getCell(position).setTextColor(color_player1);
+        } else {
+            score2 += value;
+            view_score2.setText(Integer.toString(score2));
+            ((TextView) findViewById(R.id.turn)).setText(R.string.turn_player1);
+            getCell(position).setTextColor(color_player2);
+        }
+
+        playerTurn = !playerTurn;
+//        setPlayed(position);
+        data.get(position).setPlayed();
+        getCell(position).setBackgroundColor(color_played);
+
+        resetCellsColor();
+        setAvailableCells(position);
+
+        if(available_positions.isEmpty()) End();
+    }
+
+
+    public void bot_play() {
+        boolean opponentTurn = !playerTurn;
+        //Play the value that maximize the points scored minus the max points the opponent can make on his next play
+
+        int max_points = Integer.MIN_VALUE;
+        int to_play = -1;
+        for(int i = 0; i < available_positions.size(); i++)
+        {
+            int position = available_positions.get(i);
+
+            ArrayList<Integer> opponent_cells = getPlayableCells(position,opponentTurn);
+            for(int k=0;k<opponent_cells.size();k++) opponent_cells.set(k,data.get(opponent_cells.get(k)).getValue());
+            log("bot"," opponent_cells "+Arrays.toString(opponent_cells.toArray()));
+            int outcome = data.get(position).getValue()-Collections.max(opponent_cells);
+            log("bot"," Value "+data.get(position).getValue()+" outcome "+outcome);
+            if (outcome >= max_points) {
+                max_points = outcome;
+                to_play = position;
+            }
+        }
+
+        Play(to_play);
+    }
 
 }
