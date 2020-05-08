@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class Game extends Activity implements AdapterView.OnItemClickListener {
 
-    boolean playerTurn = true;
+    boolean playerTurn = false;
     List<Integer> available_positions  = new ArrayList<>();
 
     int score1 = 0;
@@ -191,9 +191,9 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     @Override
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
     {
+        log("touch","begin player turn");
         if (available_positions.contains(position)) {
-            Play(position);
-            if(vsbot) bot_play();
+            if (Play(position) && vsbot) bot_play();
         }
         else toast("Unavailable value : "+data.get(position).getValue());
     }
@@ -206,7 +206,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         Log.d(tag, msg);
     }
 
-    public void Play(int position) {
+    public boolean Play(int position) {
 
         int value = data.get(position).getValue();
         if (playerTurn) {
@@ -227,11 +227,17 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         playerTurn = !playerTurn;
         setPlayed(position);
 
-        if(available_positions.isEmpty()) End();
+        if(available_positions.isEmpty()) {
+            End();
+            return false;
+        }
+
+        return true;
     }
 
 
     public void bot_play() {
+        log("bot","bot playing");
         boolean opponentTurn = !playerTurn;
         //Play the value that maximize the points scored minus the max points the opponent can make on his next play
 
