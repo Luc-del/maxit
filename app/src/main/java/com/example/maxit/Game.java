@@ -22,7 +22,6 @@ import java.util.List;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Game extends Activity implements AdapterView.OnItemClickListener {
 
@@ -40,6 +39,8 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     int color_player2;
     String string_player1;
     String string_player2;
+    String string_player1_wins;
+    String string_player2_wins;
 
     TextView view_score1;
     TextView view_score2;
@@ -145,15 +146,24 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         string_player1 = res.getString(R.string.turn_player1);
         string_player2 = res.getString(R.string.turn_player2);
 
+        string_player1_wins = res.getString(R.string.player1_wins);
+        string_player2_wins = res.getString(R.string.player2_wins);
+
         //vs bot : order may be swapped in bot_first_play if bot begins
         if(vsbot) {
             if(bot_begins) {
-                string_player2 = res.getString(R.string.turn_playervsbot);
                 string_player1 = getResources().getString(R.string.turn_bot);
+                string_player2 = res.getString(R.string.turn_playervsbot);
+
+                string_player1_wins = res.getString(R.string.bot_wins);
+                string_player2_wins = res.getString(R.string.playervsbot_wins);
             }
             else {
                 string_player1 = res.getString(R.string.turn_playervsbot);
                 string_player2 = res.getString(R.string.turn_bot);
+
+                string_player1_wins = res.getString(R.string.playervsbot_wins);
+                string_player2_wins = res.getString(R.string.bot_wins);
             }
         }
 
@@ -340,18 +350,18 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
                 position = i;
             }
         }
-        sleep(1000);
+//        sleep(1000);
         Play(position);
     }
 
     private void End() {
         TextView end = ((TextView) findViewById(R.id.turn));
         if(score1>score2) {
-            set_turn_info(getResources().getString(R.string.player1_wins));
+            set_turn_info(string_player1_wins);
             end.setTextColor(color_player1);
         }
         else if(score1<score2) {
-            set_turn_info(getResources().getString(R.string.player2_wins));
+            set_turn_info(string_player2_wins);
             end.setTextColor(color_player2);
         }
         else end.setText(R.string.draw);

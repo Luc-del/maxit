@@ -2,6 +2,7 @@ package com.example.maxit;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -25,6 +26,8 @@ public class CellGrid extends TextView {
     private void init() {
         Resources res = getResources();
         setBackground(res.getDrawable(R.drawable.cellgrid));
+//        setTextColor();
+        setTypeface(null, Typeface.BOLD);
     }
 
     @Override
