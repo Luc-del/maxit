@@ -1,6 +1,8 @@
 package com.example.maxit;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -19,35 +21,34 @@ import java.util.List;
 
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Game extends Activity implements AdapterView.OnItemClickListener {
-
-    boolean playerTurn = false;
-    List<Integer> available_positions  = new ArrayList<>();
-
-    int score1 = 0;
-    int score2 = 0;
-
-    TextView view_score1;
-    TextView view_score2;
 
     int Nx;
     int Ny;
     boolean vsbot;
+    boolean bot_begins = (new Random()).nextBoolean();
+
+    boolean playerTurn = true;
+    List<Integer> available_positions  = new ArrayList<>();
+    int score1 = 0;
+    int score2 = 0;
 
     int color_player1;
     int color_player2;
+    String string_player1;
+    String string_player2;
+
+    TextView view_score1;
+    TextView view_score2;
+    TextView turn_info;
 
     GridView gridview;
     GridViewAdapter gridviewAdapter;
     ArrayList<Cell> data = new ArrayList<Cell>();
 
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            return true;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,19 +65,36 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
             vsbot = b.getBoolean("bot");
         }
 
-        view_score1 = findViewById(R.id.player1_score);
-        view_score2 = findViewById(R.id.player2_score);
-        color_player1 = getResources().getColor(R.color.player1);
-        color_player2 = getResources().getColor(R.color.player2);
-
-
+        //Initialize data and gridview
         initView();
         fillData();
         setDataAdapter();
-
-        // Set all cells as available
-        for(int i = 0; i < Nx*Ny; i++) available_positions.add(i);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //Set all cells as available
+        for(int i = 0; i < Nx*Ny; i++) available_positions.add(i);
+
+        //Check if bot begins
+        gridview.post(new Runnable() {
+            @Override
+            public void run() {
+                //Playing against bot : check who begins
+                if(vsbot && bot_begins) bot_first_play();
+            }
+        });
+
+        displayViews();
+    }
+
+    /////////////////////////////////
+    //                             //
+    //        Layout handler       //
+    //                             //
+    /////////////////////////////////
 
     // Initialize the GUI Components
     private void initView()
@@ -109,15 +127,54 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         gridview.setAdapter(gridviewAdapter);
     }
 
+    private void set_turn_info(String str) {
+        turn_info.setText(str);
+    }
+
+    private void displayViews() {
+
+        Resources res = getResources();
+        view_score1 = findViewById(R.id.player1_score);
+        view_score2 = findViewById(R.id.player2_score);
+
+        color_player1 = res.getColor(R.color.player1);
+        color_player2 = res.getColor(R.color.player2);
+
+        string_player1 = res.getString(R.string.turn_player1);
+        string_player2 = res.getString(R.string.turn_player2);
+
+        //vs bot : order may be swapped in bot_first_play if bot begins
+        if(vsbot) {
+            if(bot_begins) {
+                string_player2 = res.getString(R.string.turn_playervsbot);
+                string_player1 = getResources().getString(R.string.turn_bot);
+            }
+            else {
+                string_player1 = res.getString(R.string.turn_playervsbot);
+                string_player2 = res.getString(R.string.turn_bot);
+            }
+        }
+
+        turn_info = ((TextView) findViewById(R.id.turn));
+        set_turn_info(string_player1);
+
+    }
+
+
+    /////////////////////////////////
+    //                             //
+    //       Game interactions     //
+    //                             //
+    /////////////////////////////////
+
+    private TextView getCell(int position) {
+        return (TextView) gridview.getChildAt(position);
+    }
 
     private void resetCellsColor() {
         for(int i = 0; i < available_positions.size(); i++) {
             getCell(available_positions.get(i)).setBackground(getResources().getDrawable(R.drawable.cellgrid));
         }
-    }
-
-    private TextView getCell(int position) {
-        return (TextView) gridview.getChildAt(position);
     }
 
     private void setPlayed(int position) {
@@ -140,13 +197,14 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         ArrayList<Integer> cells = new ArrayList<Integer>();
         int boundary = Nx*Ny;
         int step  = Nx;
+
         //Ligne
-        if (turn) {
+        if (turn) position%=Nx;
+        else {
             step = 1;
             boundary = Nx*(position/Nx+1);
             position = Nx*(position/Nx);
         }
-        else position%=Nx;
 
         while (position<boundary) {
             Cell cell = data.get(position);
@@ -157,37 +215,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         return cells;
     }
 
-    private void End() {
-
-        TextView end = ((TextView) findViewById(R.id.turn));
-        if(score1>score2) {
-            end.setText(R.string.player1_wins);
-            end.setTextColor(color_player1);
-        }
-        else if(score1<score2) {
-            end.setText(R.string.player2_wins);
-            end.setTextColor(color_player2);
-        }
-        else end.setText(R.string.draw);
-
-        //Make grid disappear
-        gridview.setVisibility(View.INVISIBLE);
-
-        // Make button appear
-        Button play_again = findViewById(R.id.play_again);
-        play_again.setVisibility(View.VISIBLE);
-        play_again.setClickable(true);
-
-        play_again.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                startActivity(getIntent());
-            }
-        });
-
-    }
-
+    //Actions on click when a player plays
     @Override
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
     {
@@ -198,6 +226,14 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         else toast(getResources().getString(R.string.unavailable_value)+" : "+data.get(position).getValue());
     }
 
+
+
+    /////////////////////////////////
+    //                             //
+    //            Utils            //
+    //                             //
+    /////////////////////////////////
+
     public void toast(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
@@ -206,18 +242,34 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         Log.d(tag, msg);
     }
 
+    public void sleep(int ms) {
+        try {
+            Thread.sleep(ms);
+        }
+        catch(InterruptedException ex)  {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+
+    /////////////////////////////////
+    //                             //
+    //     Gameplay and Mechanics  //
+    //                             //
+    /////////////////////////////////
+
     public boolean Play(int position) {
 
         int value = data.get(position).getValue();
         if (playerTurn) {
             score1 += value;
             view_score1.setText(Integer.toString(score1));
-            ((TextView) findViewById(R.id.turn)).setText(R.string.turn_player2);
+            turn_info.setText(string_player2);
             getCell(position).setTextColor(color_player1);
         } else {
             score2 += value;
             view_score2.setText(Integer.toString(score2));
-            ((TextView) findViewById(R.id.turn)).setText(R.string.turn_player1);
+            turn_info.setText(string_player1);
             getCell(position).setTextColor(color_player2);
         }
 
@@ -234,7 +286,6 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
         return true;
     }
-
 
     public void bot_play() {
         log("bot","bot playing");
@@ -257,8 +308,53 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
                 to_play = position;
             }
         }
-
+        sleep(1000);
         Play(to_play);
+    }
+
+    public void bot_first_play() {
+
+        log("bot","Bot plays first");
+
+        int max_value = 0;
+        int position = 0;
+        for(int i=0;i<data.size();i++) {
+            if(data.get(i).getValue()>max_value) {
+                max_value = data.get(i).getValue();
+                position = i;
+            }
+        }
+        sleep(1000);
+        Play(position);
+    }
+
+    private void End() {
+        TextView end = ((TextView) findViewById(R.id.turn));
+        if(score1>score2) {
+            set_turn_info(getResources().getString(R.string.player1_wins));
+            end.setTextColor(color_player1);
+        }
+        else if(score1<score2) {
+            set_turn_info(getResources().getString(R.string.player2_wins));
+            end.setTextColor(color_player2);
+        }
+        else end.setText(R.string.draw);
+
+        //Make grid disappear
+        gridview.setVisibility(View.INVISIBLE);
+
+        // Make button appear
+        Button play_again = findViewById(R.id.play_again);
+        play_again.setVisibility(View.VISIBLE);
+        play_again.setClickable(true);
+
+        play_again.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(getIntent());
+            }
+        });
     }
 
 }

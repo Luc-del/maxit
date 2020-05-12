@@ -4,9 +4,13 @@
 
     <string name="turn_player1">Au tour du joueur 1</string>
     <string name="turn_player2">Au tour du joueur 2</string>
+    <string name="turn_playervsbot">À votre tour</string>
+    <string name="turn_bot">Le bot réfléchi</string>
 
     <string name="player1_wins">Victoire du joueur 1</string>
     <string name="player2_wins">Victoire du joueur 2</string>
+    <string name="playervsbot_wins">Victoire !</string>
+    <string name="bot_wins">Défaite</string>
     <string name="draw">Égalité</string>
 
     <string name="play_again">Rejouer</string>
