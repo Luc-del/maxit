@@ -29,7 +29,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     int Nx;
     int Ny;
     boolean vsbot;
-    boolean bot_begins = (new Random()).nextBoolean();
+    boolean bot_begins;
 
     boolean playerTurn = true;
     List<Integer> available_positions  = new ArrayList<>();
@@ -64,6 +64,8 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
             Ny = b.getInt("Ny");
             vsbot = b.getBoolean("bot");
         }
+
+        bot_begins = (new Random()).nextBoolean();
 
         //Initialize data and gridview
         initView();
@@ -215,17 +217,6 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         return cells;
     }
 
-    //Actions on click when a player plays
-    @Override
-    public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
-    {
-        log("touch","begin player turn");
-        if (available_positions.contains(position)) {
-            if (Play(position) && vsbot) bot_play();
-        }
-        else toast(getResources().getString(R.string.unavailable_value)+" : "+data.get(position).getValue());
-    }
-
 
 
     /////////////////////////////////
@@ -251,6 +242,31 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         }
     }
 
+
+    /////////////////////////////////
+    //                             //
+    //      Player Action click    //
+    //                             //
+    /////////////////////////////////
+    @Override
+    public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
+    {
+        log("touch","begin player turn");
+        if (available_positions.contains(position)) {
+
+            if (playerTurn)  turn_info.setText(string_player2);
+            else turn_info.setText(string_player1);
+
+            gridview.post(new Runnable() {
+                @Override
+                public void run() {
+                    //Playing against bot : check who begins
+                    if (Play(position) && vsbot) bot_play();
+                }
+            });
+        }
+        else toast(getResources().getString(R.string.unavailable_value)+" : "+data.get(position).getValue());
+    }
 
     /////////////////////////////////
     //                             //
