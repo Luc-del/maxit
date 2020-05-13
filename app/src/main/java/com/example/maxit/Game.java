@@ -324,10 +324,15 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         {
             int position = available_positions.get(i);
 
+            //get cells value the opponent can play
             ArrayList<Integer> opponent_cells = getPlayableCells(position,opponentTurn);
             for(int k=0;k<opponent_cells.size();k++) opponent_cells.set(k,data.get(opponent_cells.get(k)).getValue());
+
+            //compute outcome
             log("bot"," opponent_cells "+Arrays.toString(opponent_cells.toArray()));
-            int outcome = data.get(position).getValue()-Collections.max(opponent_cells);
+            int outcome = data.get(position).getValue();
+            if(!opponent_cells.isEmpty()) outcome -= Collections.max(opponent_cells);
+            
             log("bot"," Value "+data.get(position).getValue()+" outcome "+outcome);
             if (outcome >= max_points) {
                 max_points = outcome;
