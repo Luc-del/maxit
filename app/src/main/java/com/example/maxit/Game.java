@@ -262,20 +262,28 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
     {
         log("touch","begin player turn");
+        gridview.setEnabled(false);
+
         if (available_positions.contains(position)) {
 
             if (playerTurn)  turn_info.setText(string_player2);
             else turn_info.setText(string_player1);
 
+            //Play
+            final boolean keep_playing = Play(position);
+
+            //bot_play
             gridview.post(new Runnable() {
                 @Override
                 public void run() {
                     //Playing against bot : check who begins
-                    if (Play(position) && vsbot) bot_play();
+                    if (keep_playing && vsbot) bot_play();
                 }
             });
         }
         else toast(getResources().getString(R.string.unavailable_value)+" : "+data.get(position).getValue());
+
+        gridview.setEnabled(true);
     }
 
     /////////////////////////////////
@@ -332,7 +340,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
             log("bot"," opponent_cells "+Arrays.toString(opponent_cells.toArray()));
             int outcome = data.get(position).getValue();
             if(!opponent_cells.isEmpty()) outcome -= Collections.max(opponent_cells);
-            
+
             log("bot"," Value "+data.get(position).getValue()+" outcome "+outcome);
             if (outcome >= max_points) {
                 max_points = outcome;
