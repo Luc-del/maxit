@@ -1,11 +1,9 @@
 package com.example.maxit;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -262,28 +260,31 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
     {
         log("touch","begin player turn");
-        gridview.setEnabled(false);
 
         if (available_positions.contains(position)) {
+            gridview.setEnabled(false);
 
-            if (playerTurn)  turn_info.setText(string_player2);
+            if (playerTurn) turn_info.setText(string_player2);
             else turn_info.setText(string_player1);
 
             //Play
             final boolean keep_playing = Play(position);
 
-            //bot_play
-            gridview.post(new Runnable() {
-                @Override
+            new Thread(new Runnable() {
                 public void run() {
-                    //Playing against bot : check who begins
                     if (keep_playing && vsbot) bot_play();
+                    gridview.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            gridview.setEnabled(true);
+                        }
+                    });
                 }
-            });
+            }).start();
+
+
         }
         else toast(getResources().getString(R.string.unavailable_value)+" : "+data.get(position).getValue());
-
-        gridview.setEnabled(true);
     }
 
     /////////////////////////////////
@@ -292,9 +293,9 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     //                             //
     /////////////////////////////////
 
-    public boolean Play(int position) {
+    public boolean Play(final int position) {
 
-        int value = data.get(position).getValue();
+        final int value = data.get(position).getValue();
         if (playerTurn) {
             score1 += value;
             view_score1.setText(Integer.toString(score1));
@@ -347,8 +348,15 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
                 to_play = position;
             }
         }
+
         sleep(1000);
-        Play(to_play);
+        final int bot_play = to_play;
+        gridview.post(new Runnable() {
+            @Override
+            public void run() {
+                Play(bot_play);
+            }
+        });
     }
 
     public void bot_first_play() {
@@ -363,7 +371,6 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
                 position = i;
             }
         }
-//        sleep(1000);
         Play(position);
     }
 
