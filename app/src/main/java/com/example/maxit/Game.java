@@ -197,7 +197,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
         available_positions.clear();
         available_positions = getPlayableCells(position,playerTurn);
-        for(int i = 0; i < available_positions.size(); i++) getCell(available_positions.get(i)).setBackground(getResources().getDrawable(R.drawable.cellgrid_avail));
+        for(int i = 0; i < available_positions.size(); i++) getCell(available_positions.get(i)).setBackground(getResources().getDrawable(R.drawable.cellgrid_avail_ripple));
         log("avail",Arrays.toString(available_positions.toArray()));
     }
 
