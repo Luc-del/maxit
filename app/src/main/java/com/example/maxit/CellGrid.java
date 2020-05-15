@@ -26,7 +26,7 @@ public class CellGrid extends TextView {
     private void init() {
         Resources res = getResources();
         setBackground(res.getDrawable(R.drawable.cellgrid_ripple));
-//        setTextColor();
+        setTextColor(res.getColor(R.color.text_cell));
         setTypeface(null, Typeface.BOLD);
     }
 
