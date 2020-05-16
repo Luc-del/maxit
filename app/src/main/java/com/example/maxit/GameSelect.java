@@ -76,11 +76,11 @@ public class GameSelect extends Activity {
 
         linespicker.setMaxValue(9);
         linespicker.setMinValue(3);
-        linespicker.setValue(8);
+        linespicker.setValue(Nx);
 
         columnspicker.setMaxValue(9);
         columnspicker.setMinValue(3);
-        columnspicker.setValue(8);
+        columnspicker.setValue(Ny);
 
         bot.setOnClickListener(local_game);
         online.setOnClickListener(UNAVAILABLE);
