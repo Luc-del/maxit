@@ -14,7 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 
-public class FullscreenActivity extends AppCompatActivity {
+public class WelcomeScreen extends AppCompatActivity {
 
     private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
         @Override
@@ -32,7 +32,7 @@ public class FullscreenActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_fullscreen);
+        setContentView(R.layout.welcome_screen);
 
         getSupportActionBar().hide();
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);

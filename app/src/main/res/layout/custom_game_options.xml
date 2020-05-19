@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/game_options_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="40sp"
+        android:layout_marginBottom="30sp"
+        android:textSize="25sp"
+        android:textColor="@color/played_cell"
+        android:text="@string/game_options"/>
+
+    <TableLayout
+        android:id="@+id/bot_or_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/game_options_title"
+        android:gravity="center">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <RadioGroup
+                android:id="@+id/chose_bot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/playvsbot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/playvsbot"
+                    android:padding="15sp"
+                    android:checked="true" />
+                <RadioButton
+                    android:id="@+id/local_2players"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15sp"
+                    android:text="@string/playersmode"/>
+
+            </RadioGroup>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <ViewFlipper
+                android:id="@+id/view_flipper"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center">
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/bot_easy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bot_easy"
+                        android:enabled="false"/>
+                    <RadioButton
+                        android:id="@+id/bot_normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bot_normal"
+                        android:checked="true"/>
+                    <RadioButton
+                        android:id="@+id/bot_hard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bot_hard"
+                        android:enabled="false"/>
+                </RadioGroup>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/invert_case_box"/>
+
+            </ViewFlipper>
+        </TableRow>
+    </TableLayout>
+
+
+    <GridLayout
+        android:id="@+id/dimension_picker"
+        android:layout_below="@id/bot_or_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="30sp"
+        android:rowCount="2"
+        android:columnCount="3">
+
+        <TextView
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:paddingBottom="10dp"
+            android:text="@string/lines"/>
+
+        <Space
+            android:layout_row="0"
+            android:layout_column="1"/>
+
+        <TextView
+            android:layout_row="0"
+            android:layout_column="2"
+            android:layout_gravity="center"
+            android:paddingBottom="10dp"
+            android:text="@string/columns"/>
+
+        <NumberPicker
+            android:id="@+id/linesPicker"
+            android:layout_row="1"
+            android:layout_column="0"/>
+
+        <TextView
+            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:text="X"/>
+
+        <NumberPicker
+            android:id="@+id/columnsPicker"
+            android:layout_row="1"
+            android:layout_column="2"/>
+
+    </GridLayout>
+
+
+
+    <Button
+        android:id="@+id/launch_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dimension_picker"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30sp"
+        android:text="@string/launch_game"/>
+
+</RelativeLayout>

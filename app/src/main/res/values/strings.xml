@@ -1,6 +1,31 @@
 <resources>
+
     <string name="app_name">Max it !</string>
     <string name="play_button">Cliquez sur l\'écran\n pour jouer</string>
+
+
+
+    <string name="game_mode">Modes de jeu</string>
+    <string name="campagne">Campagne</string>
+    <string name="fast_game">Partie rapide</string>
+    <string name="custom_game">Partie personnalisée</string>
+    <string name="online">Partie en ligne</string>
+
+
+
+    <string name="game_options">Paramètres de la partie</string>
+    <string name="chose_difficulty">Difficulté</string>
+    <string name="bot_easy">Facile</string>
+    <string name="bot_normal">Normal</string>
+    <string name="bot_hard">Difficile</string>
+    <string name="invert_case_box">Inverser la vue à chaque tour</string>
+    <string name="lines">Lignes</string>
+    <string name="columns">Colonnes</string>
+    <string name="playvsbot">Jouer contre l\'IA</string>
+    <string name="playersmode">Jouer à deux joueurs</string>
+    <string name="launch_game">Lancer la partie !</string>
+
+
 
     <string name="turn_player1">Au tour du joueur 1</string>
     <string name="turn_player2">Au tour du joueur 2</string>
@@ -15,13 +40,5 @@
 
     <string name="play_again">Rejouer</string>
     <string name="unavailable_value">Valeur indisponible</string>
-
-    <string name="game_mode">Modes de jeu</string>
-    <string name="brainvsbot">Brain vs IA</string>
-    <string name="local">Local</string>
-    <string name="online">Online</string>
-    <string name="custom_size">Taille personnalisée</string>
-    <string name="lines">Lignes</string>
-    <string name="columns">Colonnes</string>
 
 </resources>

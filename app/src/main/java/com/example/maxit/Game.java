@@ -48,6 +48,15 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     GridViewAdapter gridviewAdapter;
     ArrayList<Cell> data = new ArrayList<Cell>();
 
+    static Bundle CreateBundle(int Nx, int Ny, boolean bot_selected) {
+        Bundle b = new Bundle();
+        b.putInt("Nx", Nx);
+        b.putInt("Ny", Ny);
+        b.putBoolean("bot",bot_selected);
+
+        return b;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
