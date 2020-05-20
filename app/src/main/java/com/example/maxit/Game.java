@@ -2,8 +2,10 @@ package com.example.maxit;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,6 +22,8 @@ import java.util.List;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import static java.lang.Math.min;
 
 public class Game extends Activity implements AdapterView.OnItemClickListener {
 
@@ -47,6 +51,9 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     GridView gridview;
     GridViewAdapter gridviewAdapter;
     ArrayList<Cell> data = new ArrayList<Cell>();
+
+    double XFillRatio = 0.84;
+    double YFillRatio = 0.72;
 
     static Bundle CreateBundle(int Nx, int Ny, boolean bot_selected) {
         Bundle b = new Bundle();
@@ -134,6 +141,19 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     private void setDataAdapter()
     {
         gridviewAdapter = new GridViewAdapter(getApplicationContext(), R.layout.game, data);
+
+        //Determine size of cells
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        int cell_height = (int)(YFillRatio*height/Ny);
+        int cell_width = (int)(XFillRatio*width/Nx);
+        //Check if we can put square cells
+        if (Nx*cell_width < YFillRatio*height) cell_height = min(cell_width,cell_height);
+        gridviewAdapter.cell_height = cell_height;
+
         gridview.setAdapter(gridviewAdapter);
     }
 

@@ -30,8 +30,8 @@ public class CellGrid extends TextView {
         setTypeface(null, Typeface.BOLD);
     }
 
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
-    }
+//    @Override
+//    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+//    }
 }
