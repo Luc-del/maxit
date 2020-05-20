@@ -29,8 +29,8 @@ public class CustomGameOptions extends Activity {
     RadioGroup bot;
     ViewFlipper flipper;
 
-    NumberPicker linespicker;
-    NumberPicker columnspicker;
+    HorizontalNumberPicker linespicker;
+    HorizontalNumberPicker columnspicker;
 
     Button play;
 
@@ -40,6 +40,10 @@ public class CustomGameOptions extends Activity {
     private View.OnClickListener launch_game = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            Ny = linespicker.getValue();
+            Nx = columnspicker.getValue();
+
             Intent intent = new Intent(CustomGameOptions.this, Game.class);
             boolean bot_selected = false;
             if(bot.getCheckedRadioButtonId()==R.id.playvsbot) bot_selected = true;
@@ -85,23 +89,6 @@ public class CustomGameOptions extends Activity {
         });
 
         play.setOnClickListener(launch_game);
-
-        linespicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker p, int i, int i1) {
-                Ny = p.getValue();
-            }
-        });
-
-        columnspicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker p, int i, int i1) {
-                Nx = p.getValue();
-            }
-        });
-
-
-
     }
 
 

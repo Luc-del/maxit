@@ -16,7 +16,7 @@
         android:text="@string/game_options"/>
 
     <TableLayout
-        android:id="@+id/bot_or_player"
+        android:id="@+id/parameters_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/game_options_title"
@@ -94,64 +94,47 @@
 
             </ViewFlipper>
         </TableRow>
+
     </TableLayout>
 
 
     <GridLayout
-        android:id="@+id/dimension_picker"
-        android:layout_below="@id/bot_or_player"
+        android:id="@+id/pickers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/parameters_table"
+        android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="30sp"
-        android:rowCount="2"
-        android:columnCount="3">
+        android:useDefaultMargins="true"
+        android:columnCount="2"
+        android:rowCount="2">
 
         <TextView
             android:layout_row="0"
             android:layout_column="0"
-            android:layout_gravity="center"
-            android:paddingBottom="10dp"
+            android:layout_gravity="center_vertical"
             android:text="@string/lines"/>
-
-        <Space
+        <com.example.maxit.HorizontalNumberPicker
+            android:id="@+id/linesPicker"
             android:layout_row="0"
             android:layout_column="1"/>
-
         <TextView
-            android:layout_row="0"
-            android:layout_column="2"
-            android:layout_gravity="center"
-            android:paddingBottom="10dp"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_gravity="center_vertical"
             android:text="@string/columns"/>
-
-        <NumberPicker
-            android:id="@+id/linesPicker"
-            android:layout_row="1"
-            android:layout_column="0"/>
-
-        <TextView
-            android:layout_row="1"
-            android:layout_column="1"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:text="X"/>
-
-        <NumberPicker
+        <com.example.maxit.HorizontalNumberPicker
             android:id="@+id/columnsPicker"
             android:layout_row="1"
-            android:layout_column="2"/>
-
+            android:layout_column="1"/>
     </GridLayout>
-
 
 
     <Button
         android:id="@+id/launch_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dimension_picker"
+        android:layout_below="@id/pickers"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30sp"
         android:text="@string/launch_game"/>
