@@ -24,6 +24,7 @@
     <string name="playvsbot">Jouer contre l\'IA</string>
     <string name="playersmode">Jouer à deux joueurs</string>
     <string name="launch_game">Lancer la partie !</string>
+    <string name="wrong_line_row_value">Choisir un nombre entre 3 et 9</string>
 
 
 

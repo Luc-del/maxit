@@ -40,6 +40,7 @@ public class CustomGameOptions extends Activity {
     private View.OnClickListener launch_game = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            v.requestFocusFromTouch();
 
             Ny = linespicker.getValue();
             Nx = columnspicker.getValue();
@@ -84,6 +85,7 @@ public class CustomGameOptions extends Activity {
         {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                group.requestFocusFromTouch();
                 flipper.showNext();
             }
         });

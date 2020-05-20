@@ -16,45 +16,50 @@ public class HorizontalNumberPicker extends LinearLayout {
     private EditText value;
     private int min, max;
 
+    private boolean showError = true;
+
     public HorizontalNumberPicker(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+            super(context, attrs);
 
-        inflate(context, R.layout.horizontal_numberpicker, this);
+            inflate(context, R.layout.horizontal_numberpicker, this);
 
-        value = findViewById(R.id.number);
-        value.setOnFocusChangeListener(new OnFocusChangeListener() {
+            value = findViewById(R.id.number);
+            value.setOnFocusChangeListener(new OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        int newValue = getValue();
+                        if (newValue < min) value.setText(String.valueOf(min));
+                        else if (newValue > max) value.setText(String.valueOf(max));
+
+                        value.setError(null);
+                    }
+                }
+            });
+
+        value.addTextChangedListener(new TextWatcher() {
+            boolean ready = true;
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    int newValue = getValue();
-                    if (newValue < min) value.setText(String.valueOf(min));
-                    else if (newValue > max) value.setText(String.valueOf(max));
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    int input = Integer.parseInt(s.toString());
+
+                    if (showError && (input < min || input > max))
+                        value.setError(getResources().getString(R.string.wrong_line_row_value));
+                }
+                catch (NumberFormatException ex) {
+//                    if(ready) {
+//                        ready = false;
+//                        value.setText("0");
+//                        ready = true;
+//                    }
                 }
             }
         });
-
-// AS IS : not working if we delete all text and reacts instantly
-//        value.addTextChangedListener(new TextWatcher() {
-//            boolean ready = true;
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                if (value.hasFocus() && ready) {
-//                    ready = false;
-//                    int input = Integer.parseInt(s.toString());
-//                    Log.d("try", ""+input);
-//                    if (input < min) input = min;
-//                    else if (input > max) input = max;
-//
-//                    s.clear();
-//                    s.append(Integer.toString(input));
-//                    ready = true;
-//                }
-//            }
-//        });
 
         final Button add = findViewById(R.id.add);
         add.setOnClickListener(new AddHandler(1));
@@ -72,6 +77,8 @@ public class HorizontalNumberPicker extends LinearLayout {
 
         @Override
         public void onClick(View v) {
+            v.requestFocusFromTouch();
+
             int newValue = getValue() + diff;
             if (newValue < min) {
                 newValue = min;
@@ -114,5 +121,14 @@ public class HorizontalNumberPicker extends LinearLayout {
 
     public void setMaxValue(int max) {
         this.max = max;
+    }
+
+
+    public void AbleError() {
+        showError = true;
+    }
+
+    public void DisableError() {
+        showError = false;
     }
 }
