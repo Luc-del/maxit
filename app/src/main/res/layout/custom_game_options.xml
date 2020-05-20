@@ -88,6 +88,7 @@
                 </RadioGroup>
 
                 <CheckBox
+                    android:id="@+id/switch_text_orientation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/invert_case_box"/>

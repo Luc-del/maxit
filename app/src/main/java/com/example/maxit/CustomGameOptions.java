@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
@@ -23,6 +24,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.example.maxit.ParametersBundleCreator.CreateBundle;
 
 public class CustomGameOptions extends Activity {
 
@@ -46,9 +49,12 @@ public class CustomGameOptions extends Activity {
             Nx = columnspicker.getValue();
 
             Intent intent = new Intent(CustomGameOptions.this, Game.class);
-            boolean bot_selected = false;
-            if(bot.getCheckedRadioButtonId()==R.id.playvsbot) bot_selected = true;
-            Bundle b = Game.CreateBundle(Nx,Ny,bot_selected);
+
+            boolean bot_selected = bot.getCheckedRadioButtonId()==R.id.playvsbot;
+            CheckBox rotate = findViewById(R.id.switch_text_orientation);
+            boolean switch_text_rotation = !bot_selected && rotate.isChecked();
+
+            Bundle b = CreateBundle(Nx,Ny,bot_selected,switch_text_rotation);
             intent.putExtras(b);
             startActivity(intent);
             finish();

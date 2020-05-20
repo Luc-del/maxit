@@ -10,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import static com.example.maxit.ParametersBundleCreator.CreateBundle;
+
 public class GameSelect extends Activity {
 
     Button campagne;
@@ -38,7 +40,7 @@ public class GameSelect extends Activity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(GameSelect.this, Game.class);
-            Bundle b = Game.CreateBundle(5,5,true);
+            Bundle b = CreateBundle(5,5,true);
             intent.putExtras(b);
             startActivity(intent);
             finish();

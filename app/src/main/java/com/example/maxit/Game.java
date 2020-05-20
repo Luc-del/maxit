@@ -29,8 +29,9 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
     int Nx;
     int Ny;
-    boolean vsbot;
+    boolean vsbot = false;
     boolean bot_begins;
+    boolean rotate_text = false;
 
     boolean playerTurn = true;
     List<Integer> available_positions  = new ArrayList<>();
@@ -55,15 +56,6 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     double XFillRatio = 0.84;
     double YFillRatio = 0.72;
 
-    static Bundle CreateBundle(int Nx, int Ny, boolean bot_selected) {
-        Bundle b = new Bundle();
-        b.putInt("Nx", Nx);
-        b.putInt("Ny", Ny);
-        b.putBoolean("bot",bot_selected);
-
-        return b;
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +70,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
             Nx = b.getInt("Nx");
             Ny = b.getInt("Ny");
             vsbot = b.getBoolean("bot");
+            rotate_text = b.getBoolean("rotate_text");
         }
 
         bot_begins = (new Random()).nextBoolean();
@@ -254,6 +247,10 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         return cells;
     }
 
+    private void rotateCells() {
+        for (int p = 0; p < Nx * Ny; p++) getCell(p).setRotation(getCell(p).getRotation()+180);
+    }
+
 
 
     /////////////////////////////////
@@ -298,6 +295,8 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
             //Play
             final boolean keep_playing = Play(position);
+
+            if (rotate_text) rotateCells();
 
             new Thread(new Runnable() {
                 public void run() {
