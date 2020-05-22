@@ -61,7 +61,9 @@
                 android:id="@+id/view_flipper"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:inAnimation="@android:anim/slide_in_left"
+                android:outAnimation="@android:anim/slide_out_right">
 
                 <RadioGroup
                     android:layout_width="wrap_content"

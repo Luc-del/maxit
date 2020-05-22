@@ -92,11 +92,26 @@ public class CustomGameOptions extends Activity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 group.requestFocusFromTouch();
-                flipper.showNext();
+
+                if(group.getCheckedRadioButtonId()==R.id.playvsbot) SwitchLeft();
+                else SwitchRight();
             }
         });
 
         play.setOnClickListener(launch_game);
+    }
+
+
+    public void SwitchLeft() {
+        flipper.setInAnimation(this, R.anim.slide_in_right);
+        flipper.setOutAnimation(this, R.anim.slide_out_left);
+        flipper.showPrevious();
+    }
+
+    public void SwitchRight() {
+        flipper.setInAnimation(this, android.R.anim.slide_in_left);
+        flipper.setOutAnimation(this, android.R.anim.slide_out_right);
+        flipper.showNext();
     }
 
 
