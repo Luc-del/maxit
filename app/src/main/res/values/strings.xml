@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">Max it !</string>
-    <string name="play_button">Cliquez sur l\'écran\n pour jouer</string>
+    <string name="play_button">Cliquez sur l\'écran\npour jouer</string>
 
 
 
@@ -21,8 +21,8 @@
     <string name="invert_case_box">Inverser la vue à chaque tour</string>
     <string name="lines">Lignes</string>
     <string name="columns">Colonnes</string>
-    <string name="playvsbot">Jouer contre l\'IA</string>
-    <string name="playersmode">Jouer à deux joueurs</string>
+    <string name="playvsbot">Jouer\ncontre l\'IA</string>
+    <string name="playersmode">Jouer\n   à deux   </string>
     <string name="launch_game">Lancer la partie !</string>
     <string name="wrong_line_row_value">Choisir un nombre entre 3 et 9</string>
 

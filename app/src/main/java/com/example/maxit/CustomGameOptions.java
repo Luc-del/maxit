@@ -4,32 +4,25 @@ package com.example.maxit;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.GridView;
-import android.widget.NumberPicker;
-import android.widget.RadioGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static com.example.maxit.ParametersBundleCreator.CreateBundle;
 
 public class CustomGameOptions extends Activity {
 
-    RadioGroup bot;
+    TextView vsbot_text;
+    TextView vsplayer_text;
+
+    androidx.appcompat.widget.SwitchCompat bot_selector;
     ViewFlipper flipper;
 
     HorizontalNumberPicker linespicker;
@@ -50,7 +43,7 @@ public class CustomGameOptions extends Activity {
 
             Intent intent = new Intent(CustomGameOptions.this, Game.class);
 
-            boolean bot_selected = bot.getCheckedRadioButtonId()==R.id.playvsbot;
+            boolean bot_selected = !bot_selector.isChecked();
             CheckBox rotate = findViewById(R.id.switch_text_orientation);
             boolean switch_text_rotation = !bot_selected && rotate.isChecked();
 
@@ -71,7 +64,9 @@ public class CustomGameOptions extends Activity {
 
         setContentView(R.layout.custom_game_options);
 
-        bot = findViewById(R.id.chose_bot);
+        vsbot_text = findViewById(R.id.vsbot_text);
+        vsplayer_text = findViewById(R.id.vsplayer_text);
+        bot_selector = findViewById(R.id.chose_bot);
         flipper = findViewById(R.id.view_flipper);
         linespicker = findViewById(R.id.linesPicker);
         columnspicker = findViewById(R.id.columnsPicker);
@@ -86,17 +81,29 @@ public class CustomGameOptions extends Activity {
         columnspicker.setMinValue(3);
         columnspicker.setValue(Ny);
 
-
-        bot.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        vsbot_text.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                group.requestFocusFromTouch();
-
-                if(group.getCheckedRadioButtonId()==R.id.playvsbot) SwitchLeft();
-                else SwitchRight();
+            public void onClick(View v) {
+                if(bot_selector.isChecked()) bot_selector.performClick();
             }
         });
+
+        vsplayer_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!bot_selector.isChecked()) bot_selector.performClick();
+            }
+        });
+
+
+        bot_selector.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener()
+        {
+               public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                   if(isChecked) SwitchRight();
+                   else SwitchLeft();
+               }
+           });
+
 
         play.setOnClickListener(launch_game);
     }
