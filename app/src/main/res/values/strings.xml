@@ -14,6 +14,8 @@
 
 
     <string name="game_options">Paramètres de la partie</string>
+    <string name="playvsbot">Jouer\ncontre l\'IA</string>
+    <string name="playersmode">Jouer\n   à deux   </string>
     <string name="chose_difficulty">Difficulté</string>
     <string name="bot_easy">Facile</string>
     <string name="bot_normal">Normal</string>
@@ -21,10 +23,9 @@
     <string name="invert_case_box">Inverser la vue à chaque tour</string>
     <string name="lines">Lignes</string>
     <string name="columns">Colonnes</string>
-    <string name="playvsbot">Jouer\ncontre l\'IA</string>
-    <string name="playersmode">Jouer\n   à deux   </string>
+    <string name="hidden_cells">Cellules cachées</string>
     <string name="launch_game">Lancer la partie !</string>
-    <string name="wrong_line_row_value">Choisir un nombre entre 3 et 9</string>
+    <string name="wrong_line_row_value">Choisir un nombre entre %1$d et %2$d</string>
 
 
 

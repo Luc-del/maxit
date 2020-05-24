@@ -18,27 +18,35 @@ public class HorizontalNumberPicker extends LinearLayout {
 
     private boolean showError = true;
 
+    private CustomListener eventBasedListener = null;
+
+    public interface CustomListener {
+        public void onValueChange();
+    }
+
     public HorizontalNumberPicker(Context context, @Nullable AttributeSet attrs) {
-            super(context, attrs);
+        super(context, attrs);
 
-            inflate(context, R.layout.horizontal_numberpicker, this);
+        inflate(context, R.layout.horizontal_numberpicker, this);
 
-            value = findViewById(R.id.number);
-            value.setOnFocusChangeListener(new OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
-                        int newValue = getValue();
-                        if (newValue < min) value.setText(String.valueOf(min));
-                        else if (newValue > max) value.setText(String.valueOf(max));
+        value = findViewById(R.id.number);
+        value.setError(null);
 
-                        value.setError(null);
-                    }
+        value.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    int newValue = getValue();
+                    if (newValue < min) value.setText(String.valueOf(min));
+                    else if (newValue > max) value.setText(String.valueOf(max));
+                    value.setError(null);
                 }
-            });
+
+            }
+        });
 
         value.addTextChangedListener(new TextWatcher() {
-            boolean ready = true;
+//            boolean ready = true;
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
@@ -49,7 +57,10 @@ public class HorizontalNumberPicker extends LinearLayout {
                     int input = Integer.parseInt(s.toString());
 
                     if (showError && (input < min || input > max))
-                        value.setError(getResources().getString(R.string.wrong_line_row_value));
+                        value.setError(getResources().getString(R.string.wrong_line_row_value,min,max));
+
+                    if(eventBasedListener!=null)
+                        eventBasedListener.onValueChange();
                 }
                 catch (NumberFormatException ex) {
 //                    if(ready) {
@@ -85,8 +96,12 @@ public class HorizontalNumberPicker extends LinearLayout {
             } else if (newValue > max) {
                 newValue = max;
             }
-            value.setText(String.valueOf(newValue));
+            setValue(newValue);
         }
+    }
+
+    public void setCustomListener(CustomListener listener) {
+        this.eventBasedListener = listener;
     }
 
 
@@ -113,6 +128,7 @@ public class HorizontalNumberPicker extends LinearLayout {
 
     public void setMinValue(int min) {
         this.min = min;
+        if (getValue()<min) setValue(min);
     }
 
     public int getMaxValue() {
@@ -121,6 +137,14 @@ public class HorizontalNumberPicker extends LinearLayout {
 
     public void setMaxValue(int max) {
         this.max = max;
+        if (getValue()>max) setValue(max);
+    }
+
+    public void setMinMaxValues(int min, int max) {
+        this.min = min;
+        this.max = max;
+        if (getValue()<min) setValue(min);
+        if (getValue()>max) setValue(max);
     }
 
 

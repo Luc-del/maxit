@@ -29,9 +29,12 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
     int Nx;
     int Ny;
+
     boolean vsbot = false;
     boolean bot_begins;
     boolean rotate_text = false;
+
+    int N_hidden_cells = 0;
 
     boolean playerTurn = true;
     List<Integer> available_positions  = new ArrayList<>();
@@ -71,6 +74,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
             Ny = b.getInt("Ny");
             vsbot = b.getBoolean("bot");
             rotate_text = b.getBoolean("rotate_text");
+            N_hidden_cells = b.getInt("hidden_cells");
         }
 
         bot_begins = (new Random()).nextBoolean();
@@ -102,7 +106,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
     /////////////////////////////////
     //                             //
-    //        Layout handler       //
+    //        Initialization       //
     //                             //
     /////////////////////////////////
 
@@ -114,21 +118,57 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         gridview.setOnItemClickListener(this);
     }
 
-    // Insert data
+    // Instantiate cells
     private void fillData()
     {
-        List<Integer> given = new ArrayList<>();
-        for(int i = 0; i < Ny; i++)
-        {
+        List<Integer> cell_values = random_distribution_values();
+        List<Integer> hidden_cells = uniform_distribution_hidden();
+
+        for(int i = 0; i < Ny; i++) {
             for(int j = 0; j < Nx; j++) {
-//                int k = i*Nx+j;
-                int k =(int)(Nx*Ny*Math.random())+1;
-                while(given.contains(k)) k =(int)(Nx*Ny*Math.random())+1;
-                data.add(new Cell(k));
-                given.add(k);
+                int idx = j+i*Nx;
+                int val = cell_values.get(idx);
+                boolean ishidden = hidden_cells.contains(idx);
+
+                data.add(new Cell(val,ishidden));
             }
         }
     }
+
+    //Random distributions
+    private ArrayList<Integer> linear_values() {
+        ArrayList<Integer> values = new ArrayList<>();
+        for(int i = 0; i < Ny; i++)
+            for(int j = 0; j < Nx; j++)
+                values.add(i*Nx+j);
+
+        return values;
+    }
+
+    private ArrayList<Integer> random_distribution_values() {
+        ArrayList<Integer> values = new ArrayList<>();
+        for (int i = 0; i < Ny; i++) {
+            for (int j = 0; j < Nx; j++) {
+                int k = (int) (Nx * Ny * Math.random()) + 1;
+                while (values.contains(k)) k = (int) (Nx * Ny * Math.random()) + 1;
+                values.add(k);
+            }
+        }
+        return values;
+    }
+
+    private ArrayList<Integer> uniform_distribution_hidden() {
+        ArrayList<Integer> hidden_indexes = new ArrayList<>();
+
+        while(hidden_indexes.size()<N_hidden_cells) {
+            int k = (int) (Nx * Ny * Math.random()) + 1;
+            if(!hidden_indexes.contains(k)) hidden_indexes.add(k);
+        }
+
+        return hidden_indexes;
+    }
+
+
 
     // Set the Data Adapter
     private void setDataAdapter()

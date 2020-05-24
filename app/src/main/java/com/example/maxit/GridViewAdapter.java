@@ -18,7 +18,7 @@ public class GridViewAdapter extends ArrayAdapter<Cell>
 {
     Context mContext;
     int resourceId;
-    ArrayList<Cell> data = new ArrayList<Cell>();
+    ArrayList<Cell> data;
 
     public int cell_height;
 
@@ -45,8 +45,6 @@ public class GridViewAdapter extends ArrayAdapter<Cell>
         v.setText(Integer.toString(cell.getValue()));
         v.setGravity(Gravity.CENTER);
         v.setHeight(cell_height);
-
-        cell.setView(v);
 
 //        Log.d("GridViewAdapter", "Id "+cell.id +" value "+cell.value);
 

@@ -8,14 +8,20 @@ public class Cell {
     static int counter = 0;
     public int value;
     public boolean played = false;
+    public boolean hidden = false;
     public int id;
-
-    TextView view;
 
     public Cell(int x){
         value = x;
         id = counter;
         counter++;
+    }
+
+    public Cell(int x, boolean ishidden){
+        value = x;
+        id = counter;
+        counter++;
+        hidden = ishidden;
     }
 
     public void setValue(int x) {
@@ -34,20 +40,7 @@ public class Cell {
         played = true;
     }
 
-    public void setView(TextView v) {
-        view = v;
+    public boolean isHidden() {
+        return hidden;
     }
-
-    public TextView getView() {
-        return view;
-    }
-
-    public void setBackgroundColor(int c) {
-        view.setBackgroundColor(c);
-    }
-
-    public void setTextColor(int c) {
-        view.setTextColor(c);
-    }
-
 }

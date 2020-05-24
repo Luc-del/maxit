@@ -144,12 +144,36 @@
             android:layout_column="1"/>
     </GridLayout>
 
+    <GridLayout
+        android:id="@+id/cell_parameters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pickers"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:useDefaultMargins="true"
+        android:columnCount="2"
+        android:rowCount="1">
+
+        <TextView
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_gravity="center_vertical"
+            android:text="@string/hidden_cells"/>
+        <com.example.maxit.HorizontalNumberPicker
+            android:id="@+id/hidden_cells"
+            android:layout_gravity="center"
+            android:layout_row="0"
+            android:layout_column="1"/>
+
+    </GridLayout>
+
 
     <Button
         android:id="@+id/launch_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pickers"
+        android:layout_below="@id/cell_parameters"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30sp"
         android:text="@string/launch_game"/>

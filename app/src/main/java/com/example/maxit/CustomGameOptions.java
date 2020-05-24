@@ -28,6 +28,8 @@ public class CustomGameOptions extends Activity {
     HorizontalNumberPicker linespicker;
     HorizontalNumberPicker columnspicker;
 
+    HorizontalNumberPicker hidden_cells;
+
     Button play;
 
     int Nx = 5;
@@ -70,16 +72,34 @@ public class CustomGameOptions extends Activity {
         flipper = findViewById(R.id.view_flipper);
         linespicker = findViewById(R.id.linesPicker);
         columnspicker = findViewById(R.id.columnsPicker);
+        hidden_cells = findViewById(R.id.hidden_cells);
         play = findViewById(R.id.launch_game);
 
-
-        linespicker.setMaxValue(9);
-        linespicker.setMinValue(3);
+        linespicker.setMinMaxValues(3,9);
         linespicker.setValue(Nx);
 
-        columnspicker.setMaxValue(9);
-        columnspicker.setMinValue(3);
+        columnspicker.setMinMaxValues(3,9);
         columnspicker.setValue(Ny);
+
+        hidden_cells.setMinMaxValues(0,Nx*Ny);
+        hidden_cells.setValue(0);
+
+        linespicker.setCustomListener(new HorizontalNumberPicker.CustomListener() {
+            @Override
+            public void onValueChange() {
+                Nx = linespicker.getValue();
+                hidden_cells.setMaxValue(Nx*Ny);
+            }
+        });
+
+        columnspicker.setCustomListener(new HorizontalNumberPicker.CustomListener() {
+            @Override
+            public void onValueChange() {
+                Ny = columnspicker.getValue();
+                hidden_cells.setMaxValue(Nx*Ny);
+            }
+        });
+
 
         vsbot_text.setOnClickListener(new View.OnClickListener() {
             @Override
