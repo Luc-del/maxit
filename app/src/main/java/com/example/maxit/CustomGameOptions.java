@@ -48,8 +48,9 @@ public class CustomGameOptions extends Activity {
             boolean bot_selected = !bot_selector.isChecked();
             CheckBox rotate = findViewById(R.id.switch_text_orientation);
             boolean switch_text_rotation = !bot_selected && rotate.isChecked();
+            int N_hidden_cells = hidden_cells.getValue();
 
-            Bundle b = CreateBundle(Nx,Ny,bot_selected,switch_text_rotation);
+            Bundle b = CreateBundle(Nx,Ny,bot_selected,switch_text_rotation,N_hidden_cells);
             intent.putExtras(b);
             startActivity(intent);
             finish();

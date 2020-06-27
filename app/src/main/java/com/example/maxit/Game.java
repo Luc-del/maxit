@@ -83,6 +83,12 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         initView();
         fillData();
         setDataAdapter();
+
+        log("parameters","\nNx "+Nx+
+                "\nNy "+Ny+
+                "vsbot "+vsbot+
+                "\nrotate_text "+rotate_text+
+                "\nN_hidden_cells "+N_hidden_cells);
     }
 
     @Override
@@ -239,8 +245,8 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     //                             //
     /////////////////////////////////
 
-    private TextView getCell(int position) {
-        return (TextView) gridview.getChildAt(position);
+    private CellGrid getCell(int position) {
+        return (CellGrid) gridview.getChildAt(position);
     }
 
     private void resetCellsColor() {
@@ -252,6 +258,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     private void setPlayed(int position) {
         data.get(position).setPlayed();
         getCell(position).setBackground(getResources().getDrawable(R.drawable.cellgrid_played));
+        getCell(position).setText(data.get(position).getDisplayValue());
     }
 
     //After each play, update list of avaible cells (highlight)
@@ -352,7 +359,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
 
         }
-        else toast(getResources().getString(R.string.unavailable_value)+" : "+data.get(position).getValue());
+        else toast(getResources().getString(R.string.unavailable_value)+" : "+data.get(position).getDisplayValue());
     }
 
     /////////////////////////////////

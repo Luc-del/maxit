@@ -6,6 +6,8 @@ import android.widget.TextView;
 public class Cell {
 
     static int counter = 0;
+    static String hiddenValue = "?";
+
     public int value;
     public boolean played = false;
     public boolean hidden = false;
@@ -32,12 +34,18 @@ public class Cell {
         return value;
     }
 
+    public String getDisplayValue() {
+        if (isHidden()) return hiddenValue;
+        else return Integer.toString(getValue());
+    }
+
     public boolean isPlayed() {
         return played;
     }
 
     public void setPlayed() {
         played = true;
+        hidden = false;
     }
 
     public boolean isHidden() {

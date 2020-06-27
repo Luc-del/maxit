@@ -42,7 +42,7 @@ public class GridViewAdapter extends ArrayAdapter<Cell>
         else v = (TextView) convertView;
 
         Cell cell = getItem(position);
-        v.setText(Integer.toString(cell.getValue()));
+        v.setText(cell.getDisplayValue());
         v.setGravity(Gravity.CENTER);
         v.setHeight(cell_height);
 
