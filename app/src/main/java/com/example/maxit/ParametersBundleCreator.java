@@ -46,4 +46,19 @@ public abstract class ParametersBundleCreator {
 
         return b;
     }
+
+    static Bundle CreateBundle(int Nx, int Ny, boolean bot_selected, boolean switch_text_rotation, int hidden_cells, int neutral_cells) {
+        Bundle b = new Bundle();
+
+        b.putInt("Nx", Nx);
+        b.putInt("Ny", Ny);
+
+        b.putBoolean("bot",bot_selected);
+        b.putBoolean("rotate_text",switch_text_rotation);
+
+        b.putInt("hidden_cells",hidden_cells);
+        b.putInt("neutral_cells",neutral_cells);
+
+        return b;
+    }
 }

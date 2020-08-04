@@ -11,6 +11,7 @@ public class Cell {
     public int value;
     public boolean played = false;
     public boolean hidden = false;
+    public boolean neutral = false;
     public int id;
 
     public Cell(int x){
@@ -24,6 +25,14 @@ public class Cell {
         id = counter;
         counter++;
         hidden = ishidden;
+    }
+
+    public Cell(int x, boolean ishidden, boolean isneutral){
+        value = x;
+        id = counter;
+        counter++;
+        hidden = ishidden;
+        neutral = isneutral;
     }
 
     public void setValue(int x) {

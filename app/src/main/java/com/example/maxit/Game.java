@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -35,6 +36,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     boolean rotate_text = false;
 
     int N_hidden_cells = 0;
+    int N_neutral_cells = 0;
 
     boolean playerTurn = true;
     List<Integer> available_positions  = new ArrayList<>();
@@ -59,6 +61,10 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     double XFillRatio = 0.84;
     double YFillRatio = 0.72;
 
+    Resources res;
+    String res_hidden;
+    String res_neutral;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,18 +74,8 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
         setContentView(R.layout.game);
 
-        Bundle b = getIntent().getExtras();
-        if(b != null) {
-            Nx = b.getInt("Nx");
-            Ny = b.getInt("Ny");
-            vsbot = b.getBoolean("bot");
-            rotate_text = b.getBoolean("rotate_text");
-            N_hidden_cells = b.getInt("hidden_cells");
-        }
-
-        bot_begins = (new Random()).nextBoolean();
-
         //Initialize data and gridview
+        initParameters();
         initView();
         fillData();
         setDataAdapter();
@@ -88,7 +84,9 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
                 "\nNy "+Ny+
                 "vsbot "+vsbot+
                 "\nrotate_text "+rotate_text+
-                "\nN_hidden_cells "+N_hidden_cells);
+                "\nN_hidden_cells "+N_hidden_cells+
+                "\nN_neutral_cells "+N_neutral_cells
+        );
     }
 
     @Override
@@ -116,6 +114,25 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     //                             //
     /////////////////////////////////
 
+    private void initParameters() {
+        Bundle b = getIntent().getExtras();
+        if(b != null) {
+            Nx = b.getInt("Nx");
+            Ny = b.getInt("Ny");
+            vsbot = b.getBoolean("bot");
+            rotate_text = b.getBoolean("rotate_text");
+            N_hidden_cells = b.getInt("hidden_cells");
+            N_neutral_cells = b.getInt("neutral_cells");
+        }
+
+        bot_begins = (new Random()).nextBoolean();
+
+        res = getResources();
+        res_hidden = res.getString(R.string.hidden_cells);
+        res_neutral = res.getString(R.string.neutral_cells);
+
+    }
+
     // Initialize the GUI Components
     private void initView()
     {
@@ -128,15 +145,16 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     private void fillData()
     {
         List<Integer> cell_values = random_distribution_values();
-        List<Integer> hidden_cells = uniform_distribution_hidden();
+        HashMap<String,ArrayList<Integer>> special_cells = distribution_cells();
 
         for(int i = 0; i < Ny; i++) {
             for(int j = 0; j < Nx; j++) {
                 int idx = j+i*Nx;
                 int val = cell_values.get(idx);
-                boolean ishidden = hidden_cells.contains(idx);
+                boolean ishidden = special_cells.get(res_hidden).contains(idx);
+                boolean isneutral = special_cells.get(res_hidden).contains(idx);
 
-                data.add(new Cell(val,ishidden));
+                data.add(new Cell(val,ishidden,isneutral));
             }
         }
     }
@@ -163,17 +181,23 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         return values;
     }
 
-    private ArrayList<Integer> uniform_distribution_hidden() {
-        ArrayList<Integer> hidden_indexes = new ArrayList<>();
+    private HashMap<String,ArrayList<Integer>> distribution_cells() {
+        HashMap<String,ArrayList<Integer>> indexes = new HashMap<>();
+        indexes.put(res_hidden,  new ArrayList<Integer>());
+        indexes.put(res_neutral,  new ArrayList<Integer>());
 
-        while(hidden_indexes.size()<N_hidden_cells) {
+        while(indexes.get(res_hidden).size()<N_hidden_cells) {
             int k = (int) (Nx * Ny * Math.random()) + 1;
-            if(!hidden_indexes.contains(k)) hidden_indexes.add(k);
+            if(!indexes.get(res_hidden).contains(k)) indexes.get(res_hidden).add(k);
         }
 
-        return hidden_indexes;
-    }
+        while(indexes.get(res_neutral).size()<N_neutral_cells) {
+            int k = (int) (Nx * Ny * Math.random()) + 1;
+            if(!indexes.get(res_neutral).contains(k) && !indexes.get(res_hidden).contains(k)) indexes.get(res_neutral).add(k);
+        }
 
+        return indexes;
+    }
 
 
     // Set the Data Adapter
@@ -202,7 +226,6 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
     private void displayViews() {
 
-        Resources res = getResources();
         view_score1 = findViewById(R.id.player1_score);
         view_score2 = findViewById(R.id.player2_score);
 

@@ -24,6 +24,7 @@
     <string name="lines">Lignes</string>
     <string name="columns">Colonnes</string>
     <string name="hidden_cells">Cellules cachées</string>
+    <string name="neutral_cells">Cellules neutres</string>
     <string name="launch_game">Lancer la partie !</string>
     <string name="wrong_line_row_value">Choisir un nombre entre %1$d et %2$d</string>
 

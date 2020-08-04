@@ -29,6 +29,7 @@ public class CustomGameOptions extends Activity {
     HorizontalNumberPicker columnspicker;
 
     HorizontalNumberPicker hidden_cells;
+    HorizontalNumberPicker neutral_cells;
 
     Button play;
 
@@ -49,8 +50,9 @@ public class CustomGameOptions extends Activity {
             CheckBox rotate = findViewById(R.id.switch_text_orientation);
             boolean switch_text_rotation = !bot_selected && rotate.isChecked();
             int N_hidden_cells = hidden_cells.getValue();
+            int N_neutral_cells = neutral_cells.getValue();
 
-            Bundle b = CreateBundle(Nx,Ny,bot_selected,switch_text_rotation,N_hidden_cells);
+            Bundle b = CreateBundle(Nx,Ny,bot_selected,switch_text_rotation,N_hidden_cells,N_neutral_cells);
             intent.putExtras(b);
             startActivity(intent);
             finish();
@@ -74,6 +76,7 @@ public class CustomGameOptions extends Activity {
         linespicker = findViewById(R.id.linesPicker);
         columnspicker = findViewById(R.id.columnsPicker);
         hidden_cells = findViewById(R.id.hidden_cells);
+        neutral_cells = findViewById(R.id.neutral_cells);
         play = findViewById(R.id.launch_game);
 
         linespicker.setMinMaxValues(3,9);
@@ -84,6 +87,9 @@ public class CustomGameOptions extends Activity {
 
         hidden_cells.setMinMaxValues(0,Nx*Ny);
         hidden_cells.setValue(0);
+
+        neutral_cells.setMinMaxValues(0,Nx*Ny/5);
+        neutral_cells.setValue(0);
 
         linespicker.setCustomListener(new HorizontalNumberPicker.CustomListener() {
             @Override
