@@ -261,7 +261,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         getCell(position).setText(data.get(position).getDisplayValue());
     }
 
-    //After each play, update list of avaible cells (highlight)
+    //After each play, update list of available cells (highlight)
     private void setAvailableCells (int position) {
 
         available_positions.clear();
@@ -298,7 +298,19 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         for (int p = 0; p < Nx * Ny; p++) getCell(p).setRotation(getCell(p).getRotation()+180);
     }
 
+    private int guessHiddenValue() {
+        ArrayList<Integer> remainingHiddenValues = new ArrayList<Integer>();
+        for(int i = 0; i < data.size(); i++) {
+            if (data.get(i).isHidden()) remainingHiddenValues.add(data.get(i).getValue());
+        }
 
+        int mean = 0;
+        for(int i=0; i < remainingHiddenValues.size(); i++) {
+            mean += remainingHiddenValues.get(i);
+        }
+
+        return mean/remainingHiddenValues.size();
+    }
 
     /////////////////////////////////
     //                             //
@@ -410,7 +422,15 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
             //get cells value the opponent can play
             ArrayList<Integer> opponent_cells = getPlayableCells(position,opponentTurn);
-            for(int k=0;k<opponent_cells.size();k++) opponent_cells.set(k,data.get(opponent_cells.get(k)).getValue());
+            for(int k=0;k<opponent_cells.size();k++) {
+                Cell tmpCell = data.get(opponent_cells.get(k));
+                if (tmpCell.isHidden()) {
+                    int guessedValue = guessHiddenValue();
+                    opponent_cells.set(k,guessedValue);
+                    log("bot"," guessing value "+guessedValue);
+                }
+                else opponent_cells.set(k,tmpCell.getValue());
+            }
 
             //compute outcome
             log("bot"," opponent_cells "+Arrays.toString(opponent_cells.toArray()));
