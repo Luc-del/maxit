@@ -62,6 +62,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     double YFillRatio = 0.72;
 
     Resources res;
+    String res_normal;
     String res_hidden;
     String res_neutral;
 
@@ -93,8 +94,19 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     protected void onStart() {
         super.onStart();
 
-        //Set all cells as available
-        for(int i = 0; i < Nx*Ny; i++) available_positions.add(i);
+        //Set all non-neutral cells as available
+        for(int i = 0; i < Nx*Ny; i++) {
+            if (!data.get(i).isNeutral()) available_positions.add(i);
+            else {
+                final int neutral_idx = i;
+                gridview.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        getCell(neutral_idx).setBackgroundColor(res.getColor(R.color.neutral_cell));;
+                    }
+                });
+            }
+        }
 
         //Check if bot begins
         gridview.post(new Runnable() {
@@ -128,6 +140,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
         bot_begins = (new Random()).nextBoolean();
 
         res = getResources();
+        res_normal = res.getString(R.string.cells);
         res_hidden = res.getString(R.string.hidden_cells);
         res_neutral = res.getString(R.string.neutral_cells);
 
@@ -144,15 +157,14 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     // Instantiate cells
     private void fillData()
     {
-        List<Integer> cell_values = random_distribution_values();
-        HashMap<String,ArrayList<Integer>> special_cells = distribution_cells();
+        HashMap<String,ArrayList<Integer>> cell_distrib = distribution_cells();
 
         for(int i = 0; i < Ny; i++) {
             for(int j = 0; j < Nx; j++) {
                 int idx = j+i*Nx;
-                int val = cell_values.get(idx);
-                boolean ishidden = special_cells.get(res_hidden).contains(idx);
-                boolean isneutral = special_cells.get(res_hidden).contains(idx);
+                int val = cell_distrib.get(res_normal).get(idx);
+                boolean ishidden = cell_distrib.get(res_hidden).contains(idx);
+                boolean isneutral = cell_distrib.get(res_neutral).contains(idx);
 
                 data.add(new Cell(val,ishidden,isneutral));
             }
@@ -182,19 +194,37 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     }
 
     private HashMap<String,ArrayList<Integer>> distribution_cells() {
+
+        ArrayList<Integer> hidden_indexes =  new ArrayList<Integer>();
+        while(hidden_indexes.size()<N_hidden_cells) {
+            int k = (int) (Nx * Ny * Math.random()) + 1;
+            if(!hidden_indexes.contains(k)) hidden_indexes.add(k);
+        }
+
+        ArrayList<Integer> neutral_indexes =  new ArrayList<Integer>();
+        while(neutral_indexes.size()<N_neutral_cells) {
+            int k = (int) (Nx * Ny * Math.random()) + 1;
+            if(!neutral_indexes.contains(k) && !neutral_indexes.contains(k)) neutral_indexes.add(k);
+        }
+
+        ArrayList<Integer> values = new ArrayList<>();
+        for (int i = 0; i < Ny; i++) {
+            for (int j = 0; j < Nx; j++) {
+                int idx = j + i*Nx;
+                if (neutral_indexes.contains(idx)) {
+                    values.add(-1);
+                    continue;
+                }
+                int k = (int) ((Nx * Ny - N_neutral_cells) * Math.random()) + 1;
+                while (values.contains(k)) k = (int) ((Nx * Ny - N_neutral_cells) * Math.random()) + 1;
+                values.add(k);
+            }
+        }
+
         HashMap<String,ArrayList<Integer>> indexes = new HashMap<>();
-        indexes.put(res_hidden,  new ArrayList<Integer>());
-        indexes.put(res_neutral,  new ArrayList<Integer>());
-
-        while(indexes.get(res_hidden).size()<N_hidden_cells) {
-            int k = (int) (Nx * Ny * Math.random()) + 1;
-            if(!indexes.get(res_hidden).contains(k)) indexes.get(res_hidden).add(k);
-        }
-
-        while(indexes.get(res_neutral).size()<N_neutral_cells) {
-            int k = (int) (Nx * Ny * Math.random()) + 1;
-            if(!indexes.get(res_neutral).contains(k) && !indexes.get(res_hidden).contains(k)) indexes.get(res_neutral).add(k);
-        }
+        indexes.put(res_normal, values);
+        indexes.put(res_hidden, hidden_indexes);
+        indexes.put(res_neutral, neutral_indexes);
 
         return indexes;
     }
@@ -288,7 +318,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
     private void setAvailableCells (int position) {
 
         available_positions.clear();
-        available_positions = getPlayableCells(position,playerTurn);
+        available_positions = getPlayableCells(position, playerTurn);
         for(int i = 0; i < available_positions.size(); i++) getCell(available_positions.get(i)).setBackground(getResources().getDrawable(R.drawable.cellgrid_avail_ripple));
         log("avail",Arrays.toString(available_positions.toArray()));
     }
@@ -310,7 +340,7 @@ public class Game extends Activity implements AdapterView.OnItemClickListener {
 
         while (position<boundary) {
             Cell cell = data.get(position);
-            if (!cell.isPlayed() && position!=ini_pos) cells.add(position);
+            if (!cell.isPlayed() && position!=ini_pos && !cell.isNeutral()) cells.add(position);
             position+=step;
         }
 

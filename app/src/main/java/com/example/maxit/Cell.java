@@ -7,6 +7,7 @@ public class Cell {
 
     static int counter = 0;
     static String hiddenValue = "?";
+    static String neutralValue = "X";
 
     public int value;
     public boolean played = false;
@@ -45,6 +46,7 @@ public class Cell {
 
     public String getDisplayValue() {
         if (isHidden()) return hiddenValue;
+        else if (isNeutral()) return neutralValue;
         else return Integer.toString(getValue());
     }
 
@@ -59,5 +61,8 @@ public class Cell {
 
     public boolean isHidden() {
         return hidden;
+    }
+    public boolean isNeutral() {
+        return neutral;
     }
 }

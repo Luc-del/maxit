@@ -10,6 +10,7 @@
 
     <color name="available_cell">#A1CF97</color>
     <color name="played_cell">#727171</color>
+    <color name="neutral_cell">#000000</color>
 
     <color name="text_cell">#424242</color>
 </resources>

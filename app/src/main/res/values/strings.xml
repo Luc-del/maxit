@@ -23,6 +23,7 @@
     <string name="invert_case_box">Inverser la vue à chaque tour</string>
     <string name="lines">Lignes</string>
     <string name="columns">Colonnes</string>
+    <string name="cells">Cellules</string>
     <string name="hidden_cells">Cellules cachées</string>
     <string name="neutral_cells">Cellules neutres</string>
     <string name="launch_game">Lancer la partie !</string>
