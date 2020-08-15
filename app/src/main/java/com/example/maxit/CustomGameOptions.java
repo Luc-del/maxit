@@ -75,8 +75,8 @@ public class CustomGameOptions extends Activity {
         flipper = findViewById(R.id.view_flipper);
         linespicker = findViewById(R.id.linesPicker);
         columnspicker = findViewById(R.id.columnsPicker);
-        hidden_cells = findViewById(R.id.hidden_cells);
-        neutral_cells = findViewById(R.id.neutral_cells);
+        hidden_cells = findViewById(R.id.hidden_cells_picker);
+        neutral_cells = findViewById(R.id.neutral_cells_picker);
         play = findViewById(R.id.launch_game);
 
         linespicker.setMinMaxValues(3,9);
